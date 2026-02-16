@@ -572,7 +572,7 @@ footer a:hover {
   
   .lightbox-viewer {
     width: 100% !important;
-    height: 100% !important;
+    height: calc(100% - 50px) !important;
     margin: 0 !important;
     position: relative !important;
   }
@@ -940,86 +940,54 @@ function loadImage(index) {
   }
   
   // Clear and recreate container
-  const isMobile = window.innerWidth <= 768;
+  lightboxViewer.innerHTML = '<div id="osdViewer" style="width:100%; height:100%;"></div>';
   
-  // Always use OpenSeadragon, but with different settings for mobile
-  lightboxViewer.innerHTML = '<div id="osdViewer" style="width:100%; height:100%; position: absolute; top: 0; left: 0;"></div>';
-  
-  console.log('Created osdViewer div for', isMobile ? 'mobile' : 'desktop');
+  console.log('Created osdViewer div');
   
   // Create viewer immediately
   try {
-    const baseConfig = {
-      id: "osdViewer",
-      prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
-      tileSources: {
-        type: "image",
-        url: artwork.url
-      },
-      showNavigationControl: false,
-      showNavigator: false,
-      minZoomLevel: 0.5,
-      maxZoomLevel: 6,
-      visibilityRatio: 1.0,
-      animationTime: 0.5,
-      springStiffness: 10,
-    };
+    viewer = OpenSeadragon({
+    id: "osdViewer",
+    prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
+    tileSources: {
+      type: "image",
+      url: artwork.url
+    },
+    showNavigationControl: false,
+    showNavigator: false,
+    defaultZoomLevel: 0.7,
+    minZoomLevel: 0.2,
+    maxZoomLevel: 6,
+    visibilityRatio: 1.0,
+    homeFillsViewer: true,
+    constrainDuringPan: false,
+    backgroundColor: "#fff",
+    gestureSettingsMouse: {
+      clickToZoom: false,
+      dblClickToZoom: true,
+      scrollToZoom: true,
+      flickEnabled: true,
+      flickMomentum: 0.85,
+      flickMinSpeed: 0.5
+    },
+    gestureSettingsTouch: {
+      pinchToZoom: true,
+      flickEnabled: true,
+      flickMomentum: 0.85,
+      flickMinSpeed: 0.5
+    },
+    animationTime: 1.0,
+    springStiffness: 5,
+    zoomPerClick: 1.3,
+    zoomPerScroll: 1.05,
+    immediateRender: true,
+    smoothTileEdgesMinZoom: 1.5,
+    maxImageCacheCount: 200,
+    timeout: 120000,
+    pixelsPerWheelLine: 40
+  });
     
-    // Mobile-specific settings
-    if (isMobile) {
-      viewer = OpenSeadragon({
-        ...baseConfig,
-        defaultZoomLevel: 1,
-        homeFillsViewer: true,
-        constrainDuringPan: true,
-        gestureSettingsTouch: {
-          pinchToZoom: true,
-          flickEnabled: true,
-          flickMomentum: 0.4,
-          pinchRotate: false
-        },
-        // Mobile optimization
-        immediateRender: true,
-        blendTime: 0,
-        alwaysBlend: false,
-        wrapHorizontal: false,
-        wrapVertical: false,
-        showNavigationControl: false
-      });
-    } else {
-      // Desktop settings
-      viewer = OpenSeadragon({
-        ...baseConfig,
-        defaultZoomLevel: 0.7,
-        defaultZoomLevel: 0.7,
-        homeFillsViewer: true,
-        constrainDuringPan: false,
-        backgroundColor: "#fff",
-        gestureSettingsMouse: {
-          clickToZoom: false,
-          dblClickToZoom: true,
-          scrollToZoom: true,
-          flickEnabled: true,
-          flickMomentum: 0.85,
-          flickMinSpeed: 0.5
-        },
-        gestureSettingsTouch: {
-          pinchToZoom: true,
-          flickEnabled: true,
-          flickMomentum: 0.85,
-          flickMinSpeed: 0.5
-        },
-        zoomPerClick: 1.3,
-        zoomPerScroll: 1.05,
-        immediateRender: true,
-        smoothTileEdgesMinZoom: 1.5,
-        maxImageCacheCount: 200,
-        timeout: 120000,
-        pixelsPerWheelLine: 40
-      });
-    }
-    
-    // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
+  // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
   let userInteracted = false;
   
   viewer.addHandler('open', function() {
