@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO Meta Tags -->
+<title>Sebastian Verdon – Art Documentation Photography</title>
+<meta name="description" content="Sebastian Verdon, Art Documentation Photography.">
+<meta name="keywords" content="Sebastian Verdon, photographe art contemporain, documentation exposition, photographie galerie, Suisse, Neuchâtel, Baker Wardlaw, Barbezat-Villetard, Benedikt Bock, Carmen D'Apollonio, Costa Vece, Denis Savary, Elise Corpataux, Fabian Boschung, Francisco Sierra, François Jaques, Jon Merz, Jorge Raka, Karim Noureldin, Lauryn Youden, Linda Voorwinde, Lou Masduraud, Maria Guta, Lauren Huret, Martin Chramosta, Mathis Gasser, Nam June Paik, Nina Rieben, Noemi Pfister, Nolan Oswald Dennis, Paloma Proudfoot, Pamela Rosenkranz, Renaud Loda, Slavs and Tatars, Tabita Rezaire, Timo Ullmann, René Müller, Urban Zellweger, Virginie Sistek, Véronique Goël, Walead Beshty, Ximena Garrido-Lecca, Yannic Joray, Youssef Limoud, Zsófia Keresztes, CAN Centre d'art Neuchâtel, Kunsthalle Appenzell, Kunstmuseum Solothurn, Abbatiale Bellelay">
+<meta name="author" content="Sebastian Verdon">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sebastianverdon.ch">
+<meta property="og:title" content="Sebastian Verdon – Art Documentation Photography">
+<meta property="og:description" content="Sebastian Verdon, Art Documentation Photography.">
+<meta property="og:image" content="https://sebastianverdon.ch/thumbs/image1.jpg">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://sebastianverdon.ch">
+<meta property="twitter:title" content="Sebastian Verdon – Art Documentation Photography">
+<meta property="twitter:description" content="Sebastian Verdon, Art Documentation Photography.">
+<meta property="twitter:image" content="https://sebastianverdon.ch/thumbs/image1.jpg">
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://sebastianverdon.ch">
+
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+<style>
+@font-face {
+  font-family: 'Graphik';
+  src: url('Graphik-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  font-family: 'Graphik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 20px 50px;
+}
+
+.header-content {
+  max-width: 1800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  text-decoration: none;
+  display: block;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+  display: block;
+}
+
+/* Mosaic Gallery */
+.gallery {
+  width: 100%;
+  margin: 0;
+  padding: 100px 0 60px 0;
+  min-height: calc(100vh - 50px);
+}
+
+.mosaic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 300px));
+  gap: 50px;
+  width: 100%;
+  min-height: 300px;
+  background: #fff;
+  padding: 50px;
+  justify-content: start;
+}
+
+.mosaic-item {
+  position: relative;
+  overflow: hidden;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+
+.mosaic-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mosaic-item:hover img {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: 2000;
+  display: none;
+  opacity: 0;
+}
+
+.lightbox.active {
+  display: block;
+  animation: lightboxFadeIn 0.6s ease forwards;
+}
+
+.lightbox.closing {
+  animation: lightboxFadeOut 1.2s ease forwards;
+}
+
+@keyframes lightboxFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lightboxFadeOut {
+  from { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  to { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.lightbox-viewer {
+  width: calc(100% - 70px);
+  height: calc(100% - 70px);
+  position: relative;
+  opacity: 1;
+  cursor: zoom-in;
+  transform-origin: center center;
+  margin: 35px 35px 35px 35px;
+  box-sizing: border-box;
+}
+
+.lightbox-viewer.zoom-in-animation {
+  animation: zoomInFromThumbnail 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes zoomInFromThumbnail {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lightbox-viewer.zoomed {
+  cursor: grab;
+}
+
+.lightbox-viewer.zoomed:active {
+  cursor: grabbing;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  color: #333;
+  font-size: 28px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.lightbox-close:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  color: #333;
+  font-size: 36px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.lightbox-nav:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-nav.prev {
+  left: 10px;
+}
+
+.lightbox-nav.next {
+  right: 10px;
+}
+
+.lightbox-caption {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 20px;
+  background: #fff;
+  color: #333;
+  z-index: 2001;
+  text-align: center;
+  pointer-events: none;
+  opacity: 1;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.lightbox-caption p {
+  display: inline;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  margin: 0;
+}
+
+.zoom-instructions {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  color: #fff;
+  font-size: 64px;
+  z-index: 2002;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  text-align: center;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.zoom-instructions.show {
+  opacity: 0.8;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  color: #333;
+  text-align: center;
+  padding: 12px 50px;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  z-index: 1001;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: none;
+  box-shadow: none;
+}
+
+.lightbox.active ~ footer {
+  border-top: none;
+  box-shadow: none;
+}
+
+footer a {
+  color: #333;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+  opacity: 0.6;
+}
+
+.footer-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.contact-btn {
+  padding: 6px 16px;
+  background: #333;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.contact-btn:hover {
+  background: #000;
+}
+
+.footer-info p {
+  display: inline;
+  margin: 0;
+}
+
+.footer-info p::after {
+  content: " • ";
+  margin: 0 8px;
+}
+
+.footer-info p:last-child::after {
+  content: "";
+  margin: 0;
+}
+
+.footer-info a {
+  color: #333;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.footer-info a:hover {
+  opacity: 0.6;
+}
+
+.contact-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.contact-form input {
+  padding: 6px 12px;
+  border: 1px solid #666;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Graphik', sans-serif;
+  border-radius: 3px;
+  width: 200px;
+}
+
+.contact-form input::placeholder {
+  color: #999;
+}
+
+.contact-form button {
+  padding: 6px 16px;
+  background: #333;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Graphik', sans-serif;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+  background: #000;
+}
+
+/* Search Bar */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-family: 'Graphik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  color: #333;
+  outline: none;
+  padding: 8px 0;
+  width: 250px;
+  border-bottom: 1px solid #ddd;
+  transition: border-color 0.3s ease, width 0.3s ease;
+}
+
+.search-input:focus {
+  border-bottom-color: #333;
+  width: 350px;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-results-count {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.clear-search {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+
+.clear-search:hover {
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-input {
+    width: 150px;
+    font-size: 12px;
+  }
+  
+  .search-input:focus {
+    width: 200px;
+  }
+  
+  .search-results-count {
+    display: none;
+  }
+  
+  .mosaic-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .mosaic-item {
+    aspect-ratio: 4/3;
+    min-width: 0; /* Fix for grid overflow */
+  }
+  
+  .mosaic-item[style*="display: none"] {
+    display: none !important;
+  }
+  
+  .mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  header {
+    padding: 15px 20px;
+  }
+  
+  .logo img {
+    height: 35px;
+  }
+  
+  .mosaic-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 30px;
+  }
+  
+  .gallery {
+    padding: 80px 0 20px 0;
+  }
+  
+  footer {
+    padding: 10px 15px;
+    font-size: 9px;
+    border-top: none;
+    box-shadow: none;
+  }
+  
+  .footer-info {
+    gap: 8px;
+  }
+  
+  footer a {
+    font-size: 9px;
+  }
+  
+  .contact-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .lightbox-nav {
+    width: 35px;
+    height: 35px;
+    font-size: 40px;
+  }
+  
+  .lightbox-nav.prev {
+    left: 15px;
+  }
+  
+  .lightbox-nav.next {
+    right: 15px;
+  }
+  
+  .lightbox-close {
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    font-size: 32px;
+  }
+  
+  .lightbox-viewer {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    position: relative !important;
+  }
+  
+}
+</style>
+
+<!-- Schema.org structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Sebastian Verdon Photography",
+  "description": "Photographe spécialisé en documentation d'art contemporain pour galeries, musées et artistes en Suisse",
+  "url": "https://sebastianverdon.ch",
+  "telephone": "",
+  "email": "sv@sebastianverdon.ch",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Neuchâtel",
+    "addressRegion": "NE",
+    "addressCountry": "CH"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "46.9899",
+    "longitude": "6.9299"
+  },
+  "priceRange": "$$",
+  "image": "https://sebastianverdon.ch/thumbs/image1.jpg",
+  "founder": {
+    "@type": "Person",
+    "name": "Sebastian Verdon",
+    "jobTitle": "Art Documentation Photography"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Switzerland"
+  },
+  "serviceType": [
+    "Photographie d'exposition",
+    "Documentation d'art contemporain",
+    "Photographie de galerie",
+    "Photographie de musée"
+  ]
+}
+</script>
+
+</head>
+<body>
+
+<!-- SEO Content - Hidden but indexable -->
+<div style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+  <h1>Sebastian Verdon - Art Documentation Photography en Suisse</h1>
+  
+  <h2>Documentation photographique d'expositions</h2>
+  <p>Sebastian Verdon est un photographe spécialisé dans la documentation d'art contemporain pour les institutions culturelles, galeries, artistes, collectionneurs et maisons d'édition en Suisse romande.</p>
+  
+  <h3>Artistes documentés</h3>
+  <p>Baker Wardlaw, Barbezat-Villetard, Benedikt Bock, Carmen D'Apollonio, Costa Vece, Denis Savary, Elise Corpataux, Fabian Boschung, Francisco Sierra, François Jaques, Jon Merz, Jorge Raka, Karim Noureldin, Lauryn Youden, Linda Voorwinde, Lou Masduraud, Maria Guta, Lauren Huret, Martin Chramosta, Mathis Gasser, Nam June Paik, Nina Rieben, Noemi Pfister, Nolan Oswald Dennis, Paloma Proudfoot, Pamela Rosenkranz, Renaud Loda, Slavs and Tatars, Tabita Rezaire, Timo Ullmann, René Müller, Urban Zellweger, Virginie Sistek, Véronique Goël, Walead Beshty, Ximena Garrido-Lecca, Yannic Joray, Youssef Limoud, Zsófia Keresztes</p>
+  
+  <h3>Institutions et lieux</h3>
+  <p>CAN Centre d'art Neuchâtel, Kunsthalle Appenzell, Kunstmuseum Appenzell, Kunstmuseum Solothurn, Abbatiale de Bellelay, EAC Les Halles Porrentruy, KBCB Biel/Bienne, Lieu secret Biel/Bienne, La Placette Lausanne, von Bartha Basel, Montmollin</p>
+  
+  <h3>Expositions photographiées</h3>
+  <p>Parallels Part 1: Astral Border, Parallels Part 2: The Commuter, Parallels Part 3: Central Heating Visions, Désordre sacré, Reverse Engineering, L'Effet de serre, Alfombra, Corniche, Never confuse shit for cioccolato, Barbara, Mehr Licht. Video in der Kunst, Klang der Erde. Keramik in der zeitgenössischen Kunst, No Center, quartz crisis, Hot Shots!, Art en plein air, Kunst am Bau</p>
+  
+  <h3>Services</h3>
+  <p>Photographie d'exposition, documentation d'œuvres d'art, photographie de galerie, photographie de musée, documentation artistique professionnelle, photographie d'installation, photographie d'art contemporain</p>
+  
+  <p>Contact : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f98a8fb98a9c9b988a8d9098978f9c8b9d9697d79a91">[email&#160;protected]</a></p>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-content">
+    <a href="#" class="logo">
+      <img src="sv-logo-mini.jpg" alt="Sebastian Verdon">
+    </a>
+    
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="Rechercher...">
+      <span class="search-results-count" id="resultsCount"></span>
+      <button class="clear-search" id="clearSearch" style="display:none;">×</button>
+    </div>
+  </div>
+</header>
+
+<!-- Gallery Section -->
+<section class="gallery">
+  <div class="mosaic-grid" id="mosaicGrid"></div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="closeLightbox">×</button>
+  <button class="lightbox-nav prev" id="prevImage">‹</button>
+  <button class="lightbox-nav next" id="nextImage">›</button>
+  <div class="lightbox-viewer" id="lightboxViewer"></div>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-info">
+    <p>© 2026 all rights reserved</p>
+  </div>
+  <a href="about.html">About</a>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, starting script...');
+
+
+// Configuration des images - 63 images
+const artworks = [
+  { url: "hires/image1.jpg", thumb: "thumbs/image1.jpg", info: "Linda Voorwinde, Spring, 2022, Parallels Part 2: The Commuter, CAN Centre d'art Neuchâtel, 2022", artist: "Linda Voorwinde", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 2: The Commuter" },
+  { url: "hires/image2.jpg", thumb: "thumbs/image2.jpg", info: "Lauryn Youden, To Offer You something, To Bring Relief (détail), 2020, Désordre sacré, CAN Centre d'art Neuchâtel, 2024", artist: "Lauryn Youden", year: "2024", location: "CAN Centre d'art Neuchâtel", exhibition: "Désordre sacré" },
+  { url: "hires/image3.jpg", thumb: "thumbs/image3.jpg", info: "Lauryn Youden, From the Great Above She Opened her Ear to the Great Below, 2020, Désordre sacré, CAN Centre d'art Neuchâtel, 2024", artist: "Lauryn Youden", year: "2024", location: "CAN Centre d'art Neuchâtel", exhibition: "Désordre sacré" },
+  { url: "hires/image4.jpg", thumb: "thumbs/image4.jpg", info: "Slavs and Tatars, Pamela Rosenkranz, Left:  Slavs and Tatars, Sanft Power (detail), 2022, Pamela Rosenkranz, Creation, Deterioration, Conservation (Lemis), 2017, Désordre sacré, CAN Centre d'art Neuchâtel, 2024", artist: "Slavs and Tatars, Pamela Rosenkranz", year: "2024", location: "CAN Centre d'art Neuchâtel", exhibition: "Désordre sacré" },
+  { url: "hires/image5.jpg", thumb: "thumbs/image5.jpg", info: "Ximena Garrido-Lecca, Reverse Engineering, 2023, Reverse Engineering, CAN Centre d'art Neuchâtel, 2023", artist: "Ximena Garrido-Lecca", year: "2023", location: "CAN Centre d'art Neuchâtel", exhibition: "Reverse Engineering" },
+  { url: "hires/image6.jpg", thumb: "thumbs/image6.jpg", info: "Gabriele Garavaglia,Théa Giglio,Gilles Jacot, Exhibition view, 2025, Long distance relationship, Smallville, 2025, Curated by Katia Leonelli & Marius Quiblier", artist: "Gabriele Garavaglia,Théa Giglio,Gilles Jacot", year: "2025", location: "Smallville", exhibition: "Long distance relationship" },
+  { url: "hires/image7.jpg", thumb: "thumbs/image7.jpg", info: "Ximena Garrido-Lecca, Reverse Engineering, 2023, Reverse Engineering, CAN Centre d'art Neuchâtel, 2023", artist: "Ximena Garrido-Lecca", year: "2023", location: "CAN Centre d'art Neuchâtel", exhibition: "Reverse Engineering" },
+  { url: "hires/image8.jpg", thumb: "thumbs/image8.jpg", info: "Ximena Garrido-Lecca, Reverse Engineering (detail), 2023, Reverse Engineering, CAN Centre d'art Neuchâtel, 2023", artist: "Ximena Garrido-Lecca", year: "2023", location: "CAN Centre d'art Neuchâtel", exhibition: "Reverse Engineering" },
+  { url: "hires/image9.jpg", thumb: "thumbs/image9.jpg", info: "Barbezat-Villetard, l'Humeur, 2022, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Barbezat-Villetard", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image10.jpg", thumb: "thumbs/image10.jpg", info: "Youssef Limoud, Elements of the Void, 2022, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Youssef Limoud", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image11.jpg", thumb: "thumbs/image11.jpg", info: "Yannic Joray, The Red Planet, 2021, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Yannic Joray", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image12.jpg", thumb: "thumbs/image12.jpg", info: "Nina Rieben, Sehnsucht nach gestern ist Angst vor der Zeit, 2022, Parallels Part 2: The Commuter, CAN Centre d'art Neuchâtel, 2022", artist: "Nina Rieben", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 2: The Commuter" },
+  { url: "hires/image13.jpg", thumb: "thumbs/image13.jpg", info: "Jorge Raka, Raka 'n' Roll, performance, 2022, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Jorge Raka", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image14.jpg", thumb: "thumbs/image14.jpg", info: "Mathis Gasser, Exhibition view, 2022, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Mathis Gasser", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image15.jpg", thumb: "thumbs/image15.jpg", info: "Mathis Gasser, Ship (Invasion), 2022, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Mathis Gasser", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image16.jpg", thumb: "thumbs/image16.jpg", info: "Nolan Oswald Dennis, model for a dialectic (illuminated), 2022, Parallels Part 2: The Commuter, CAN Centre d'art Neuchâtel, 2022", artist: "Nolan Oswald Dennis", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 2: The Commuter" },
+  { url: "hires/image17.jpg", thumb: "thumbs/image17.jpg", info: "Gina Proenza, Exhibition view, 2020, Agarra-diablo, CAN Centre d'art Neuchâtel, 2020", artist: "Gina Proenza", year: "2020", location: "CAN Centre d'art Neuchâtel", exhibition: "Agarra-diablo" },
+  { url: "hires/image18.jpg", thumb: "thumbs/image18.jpg", info: "Maria Guta & Lauren Huret, Mad at Dad (work in progress), 2022, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Maria Guta & Lauren Huret", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image19.jpg", thumb: "thumbs/image19.jpg", info: "Linda Voorwinde, Exhibition view, 2022, Parallels Part 2: The Commuter, CAN Centre d'art Neuchâtel, 2022", artist: "Linda Voorwinde", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 2: The Commuter" },
+  { url: "hires/image20.jpg", thumb: "thumbs/image20.jpg", info: "Tabita Rezaire, Orbit Diapason (detail), 2021, Parallels Part 3: Central Heating Visions, CAN Centre d'art Neuchâtel, 2022", artist: "Tabita Rezaire", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 3: Central Heating Visions" },
+  { url: "hires/image21.jpg", thumb: "thumbs/image21.jpg", info: "Urban Zellweger, Panorama (Pizzabox XXXI-XLIII), 2022, Parallels Part 3: Central Heating Visions, CAN Centre d'art Neuchâtel, 2022", artist: "Urban Zellweger", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 3: Central Heating Visions" },
+  { url: "hires/image22.jpg", thumb: "thumbs/image22.jpg", info: "Urban Zellweger, Panorama (Pizzabox XXXI-XLIII), exhibition view, 2022, Parallels Part 3: Central Heating Visions, CAN Centre d'art Neuchâtel, 2022", artist: "Urban Zellweger", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 3: Central Heating Visions" },
+  { url: "hires/image23.jpg", thumb: "thumbs/image23.jpg", info: "Zsófia Keresztes, Fence, 2022, Parallels Part 3: Central Heating Visions, CAN Centre d'art Neuchâtel, 2022", artist: "Zsófia Keresztes", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 3: Central Heating Visions" },
+  { url: "hires/image24.jpg", thumb: "thumbs/image24.jpg", info: "Lou Masduraud, Plan d'évasion (suture), 2021, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Lou Masduraud", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image25.jpg", thumb: "thumbs/image25.jpg", info: "Lou Masduraud, Active substances Fountain, 2018, Parallels Part 1: Astral Border, CAN Centre d'art Neuchâtel, 2022", artist: "Lou Masduraud", year: "2022", location: "CAN Centre d'art Neuchâtel", exhibition: "Parallels Part 1: Astral Border" },
+  { url: "hires/image26.jpg", thumb: "thumbs/image26.jpg", info: "Fabian Boschung, Exhibition view, 2022, Never confuse shit for cioccolato , La Placette, Lausanne, 2022", artist: "Fabian Boschung", year: "2022", location: "La Placette, Lausanne", exhibition: "Never confuse shit for cioccolato " },
+  { url: "hires/image27.jpg", thumb: "thumbs/image27.jpg", info: "Fabian Boschung, Never confuse shit for cioccolato , La Placette, Lausanne, 2022", artist: "Fabian Boschung", year: "2022", location: "La Placette, Lausanne", exhibition: "Never confuse shit for cioccolato " },
+  { url: "hires/image28.jpg", thumb: "thumbs/image28.jpg", info: "Fabian Boschung, Never confuse shit for cioccolato , La Placette, Lausanne, 2022", artist: "Fabian Boschung", year: "2022", location: "La Placette, Lausanne", exhibition: "Never confuse shit for cioccolato " },
+  { url: "hires/image29.jpg", thumb: "thumbs/image29.jpg", info: "Francisco Sierra, Exhibition view, 2023, Corniche, Kunsthalle Appenzell, 2023, Curated by Stefanie Gschwend", artist: "Francisco Sierra", year: "2023", location: "Kunsthalle Appenzell", exhibition: "Corniche" },
+  { url: "hires/image30.jpg", thumb: "thumbs/image30.jpg", info: "Francisco Sierra, Mother Bar I, 2021, Corniche, Kunsthalle Appenzell, 2023, Curated by Stefanie Gschwend", artist: "Francisco Sierra", year: "2023", location: "Kunsthalle Appenzell", exhibition: "Corniche" },
+  { url: "hires/image31.jpg", thumb: "thumbs/image31.jpg", info: "Francisco Sierra, Exhibition view, 2023, Corniche, Kunsthalle Appenzell, 2023, Curated by Stefanie Gschwend", artist: "Francisco Sierra", year: "2023", location: "Kunsthalle Appenzell", exhibition: "Corniche" },
+  { url: "hires/image32.jpg", thumb: "thumbs/image32.jpg", info: "Francisco Sierra, Exhibition view, 2023, Corniche, Kunsthalle Appenzell, 2023, Curated by Stefanie Gschwend", artist: "Francisco Sierra", year: "2023", location: "Kunsthalle Appenzell", exhibition: "Corniche" },
+  { url: "hires/image33.jpg", thumb: "thumbs/image33.jpg", info: "Francisco Sierra, Lazuil, 2025, Private collection", artist: "Francisco Sierra", year: "", location: "", exhibition: "" },
+  { url: "hires/image34.jpg", thumb: "thumbs/image34.jpg", info: "Francisco Sierra, Exhibition view, 2025, Alfombra, Kunstmuseum Solthurn, 2025", artist: "Francisco Sierra", year: "2025", location: "Kunstmuseum Solthurn", exhibition: "Alfombra" },
+  { url: "hires/image35.jpg", thumb: "thumbs/image35.jpg", info: "Francisco Sierra, Exhibition view, 2025, Alfombra, Kunstmuseum Solthurn, 2025", artist: "Francisco Sierra", year: "2025", location: "Kunstmuseum Solthurn", exhibition: "Alfombra" },
+  { url: "hires/image36.jpg", thumb: "thumbs/image36.jpg", info: "Francisco Sierra, Twee dolfijnen op de wiegende zee, 2025", artist: "Francisco Sierra", year: "", location: "", exhibition: "" },
+  { url: "hires/image37.jpg", thumb: "thumbs/image37.jpg", info: "Francisco Sierra, Joint No. 3, 2025", artist: "Francisco Sierra", year: "", location: "", exhibition: "" },
+  { url: "hires/image38.jpg", thumb: "thumbs/image38.jpg", info: "Benedikt Bock, What People Want is Not What People Need (Rebekka), 2023, L'Effet de serre, Abbatiale Bellelay, 2024, Curated by Sylvain Menetrey ", artist: "Benedikt Bock", year: "2024", location: "Abbatiale Bellelay", exhibition: "L'Effet de serre" },
+  { url: "hires/image39.jpg", thumb: "thumbs/image39.jpg", info: "Virginie Sistek, Pâtis Tidiness, 2023, L'Effet de serre, Abbatiale Bellelay, 2024, Curated by Sylvain Menetrey ", artist: "Virginie Sistek", year: "2024", location: "Abbatiale Bellelay", exhibition: "L'Effet de serre" },
+  { url: "hires/image40.jpg", thumb: "thumbs/image40.jpg", info: "Exhibition view, 2024, L'Effet de serre, Abbatiale Bellelay, 2024, Curated by Sylvain Menetrey ", artist: "", year: "2024", location: "Abbatiale Bellelay", exhibition: "L'Effet de serre" },
+  { url: "hires/image41.jpg", thumb: "thumbs/image41.jpg", info: "Exhibition view, 2024, L'Effet de serre, Abbatiale Bellelay, 2024, Curated by Sylvain Menetrey ", artist: "", year: "2024", location: "Abbatiale Bellelay", exhibition: "L'Effet de serre" },
+  { url: "hires/image42.jpg", thumb: "thumbs/image42.jpg", info: "Jon Merz, Plus est en vous, 2021, Art en plein air, Môtiers, 2021", artist: "Jon Merz", year: "2021", location: "Môtiers", exhibition: "Art en plein air" },
+  { url: "hires/image43.jpg", thumb: "thumbs/image43.jpg", info: "Exhibition view, 2024, L'Effet de serre, Abbatiale Bellelay, 2024, Curated by Sylvain Menetrey ", artist: "", year: "2024", location: "Abbatiale Bellelay", exhibition: "L'Effet de serre" },
+  { url: "hires/image44.jpg", thumb: "thumbs/image44.jpg", info: "Baker Wardlaw, The partners, 2023, quartz  crisis, EAC (les halles), 2023, Fabian Boschung", artist: "Baker Wardlaw", year: "2023", location: "EAC (les halles)", exhibition: "quartz  crisis" },
+  { url: "hires/image45.jpg", thumb: "thumbs/image45.jpg", info: "Fabian Boschung, Exhibition view, 2022, Barbara, Abstract, Lausanne", artist: "Fabian Boschung", year: "", location: "Abstract, Lausanne", exhibition: "Barbara" },
+  { url: "hires/image46.jpg", thumb: "thumbs/image46.jpg", info: "Karim Noureldin, Play, 2022 and Des, 2020. Courtesy von Bartha, Basel, von Bartha, Basel, 2024", artist: "Karim Noureldin", year: "2024", location: "von Bartha, Basel", exhibition: "" },
+  { url: "hires/image47.jpg", thumb: "thumbs/image47.jpg", info: "Renaud Loda, 🖤, Kunst am Bau, Montmollin, 2024", artist: "Renaud Loda", year: "2024", location: "Montmollin", exhibition: "Kunst am Bau" },
+  { url: "hires/image48.jpg", thumb: "thumbs/image48.jpg", info: "Walead Beshty, 00.00.00, 2022, Lieu secret Biel/Bienne, 2024", artist: "Walead Beshty", year: "2024", location: "Lieu secret Biel/Bienne", exhibition: "" },
+  { url: "hires/image49.jpg", thumb: "thumbs/image49.jpg", info: "Denis Savary, Exhibition view, 2024, Hot Shots!, EAC (les halles), 2024, Curated by Gregory Sugnaux & Nicolas Ponce", artist: "Denis Savary", year: "2024", location: "EAC (les halles)", exhibition: "Hot Shots!" },
+  { url: "hires/image50.jpg", thumb: "thumbs/image50.jpg", info: "Elise Corpataux, The Kiss, 2024, Hot Shots!, EAC (les halles), 2024, Curated by Gregory Sugnaux & Nicolas Ponce", artist: "Elise Corpataux", year: "2024", location: "EAC (les halles)", exhibition: "Hot Shots!" },
+  { url: "hires/image51.jpg", thumb: "thumbs/image51.jpg", info: "Francisco Sierra, Exhibition view, 2025, Alfombra, Kunstmuseum Solthurn, 2025", artist: "Francisco Sierra", year: "2025", location: "Kunstmuseum Solthurn", exhibition: "Alfombra" },
+  { url: "hires/image52.jpg", thumb: "thumbs/image52.jpg", info: "Nam June Paik, Costa Vece, Nam June Paik, One Candle, 1988 and Costa Vece, IN©UT, 1996, exhibition view, 2026, Mehr Licht. Video in der Kunst, Kunstmuseum Solthurn, 2026", artist: "Nam June Paik, Costa Vece", year: "2026", location: "Kunstmuseum Solthurn", exhibition: "Mehr Licht. Video in der Kunst" },
+  { url: "hires/image53.jpg", thumb: "thumbs/image53.jpg", info: "Timo Ullmann & René Müller, Chandellier_Simulacrum, 2025, Mehr Licht. Video in der Kunst, Kunstmuseum Solthurn, 2026", artist: "Timo Ullmann & René Müller", year: "2026", location: "Kunstmuseum Solthurn", exhibition: "Mehr Licht. Video in der Kunst" },
+  { url: "hires/image54.jpg", thumb: "thumbs/image54.jpg", info: "Véronique Goël, Véronique Goël, Fugue, 2002, Mehr Licht. Video in der Kunst, Kunstmuseum Solthurn, 2026", artist: "Véronique Goël", year: "2026", location: "Kunstmuseum Solthurn", exhibition: "Mehr Licht. Video in der Kunst" },
+  { url: "hires/image55.jpg", thumb: "thumbs/image55.jpg", info: "Paloma Proudfoot, Gardening, 2024, Klang der Erde. Keramik in der zeitgenössischen Kunst, Kunstmuseum Appenzell, 2025, Curated by Stefanie Gschwend", artist: "Paloma Proudfoot", year: "2025", location: "Kunstmuseum Appenzell", exhibition: "Klang der Erde. Keramik in der zeitgenössischen Kunst" },
+  { url: "hires/image56.jpg", thumb: "thumbs/image56.jpg", info: "Carmen D'Apollonio , No way out, 2023, Klang der Erde. Keramik in der zeitgenössischen Kunst, Kunstmuseum Appenzell, 2025, Curated by Stefanie Gschwend", artist: "Carmen D'Apollonio ", year: "2025", location: "Kunstmuseum Appenzell", exhibition: "Klang der Erde. Keramik in der zeitgenössischen Kunst" },
+  { url: "hires/image57.jpg", thumb: "thumbs/image57.jpg", info: "Paloma Proudfoot, Drinking in my eyes (VI), 2023, Klang der Erde. Keramik in der zeitgenössischen Kunst, Kunstmuseum Appenzell, 2025, Curated by Stefanie Gschwend", artist: "Paloma Proudfoot", year: "2025", location: "Kunstmuseum Appenzell", exhibition: "Klang der Erde. Keramik in der zeitgenössischen Kunst" },
+  { url: "hires/image58.jpg", thumb: "thumbs/image58.jpg", info: "Martin Chramosta, Exhibition view, 2025, Klang der Erde. Keramik in der zeitgenössischen Kunst, Kunstmuseum Appenzell, 2025, Curated by Stefanie Gschwend", artist: "Martin Chramosta", year: "2025", location: "Kunstmuseum Appenzell", exhibition: "Klang der Erde. Keramik in der zeitgenössischen Kunst" },
+  { url: "hires/image59.jpg", thumb: "thumbs/image59.jpg", info: "Martin Chramosta, FUR, 2022, Klang der Erde. Keramik in der zeitgenössischen Kunst, Kunstmuseum Appenzell, 2025, Curated by Stefanie Gschwend", artist: "Martin Chramosta", year: "2025", location: "Kunstmuseum Appenzell", exhibition: "Klang der Erde. Keramik in der zeitgenössischen Kunst" },
+  { url: "hires/image60.jpg", thumb: "thumbs/image60.jpg", info: "Francisco Sierra, O sole tuo, 2025", artist: "Francisco Sierra", year: "", location: "", exhibition: "" },
+  { url: "hires/image61.jpg", thumb: "thumbs/image61.jpg", info: "Gina Proenza, Exhibition view, 2020, Agarra-diablo, CAN Centre d'art Neuchâtel, 2020", artist: "Gina Proenza", year: "2020", location: "CAN Centre d'art Neuchâtel", exhibition: "Agarra-diablo" },
+  { url: "hires/image62.jpg", thumb: "thumbs/image62.jpg", info: "Noemi Pfister, Wo stehst du mit deiner Kunst Kolleg*?, 2023, No Center, CAN Centre d'art Neuchâtel, 2025", artist: "Noemi Pfister", year: "2025", location: "CAN Centre d'art Neuchâtel", exhibition: "No Center" },
+  { url: "hires/image63.jpg", thumb: "thumbs/image63.jpg", info: "François Jaques, Evasure, Exhibition view, 2025, No Center, CAN Centre d'art Neuchâtel, 2025", artist: "François Jaques, Evasure", year: "2025", location: "CAN Centre d'art Neuchâtel", exhibition: "No Center" },
+  { url: "hires/image64.jpg", thumb: "thumbs/image64.jpg", info: "Renate Rabus, Smallville, 2025", artist: "Renate Rabus", year: "2025", location: "Smallville", exhibition: "Troubles" },
+  { url: "hires/image65.jpg", thumb: "thumbs/image65.jpg", info: "Olivier Mosset, Exhibition view, 2025, Smallville 10 ans, Smallville, 2025", artist: "Olivier Mosset", year: "2025", location: "Smallville", exhibition: "Smallville 10 ans" },
+  { url: "hires/image66.jpg", thumb: "thumbs/image66.jpg", info: "Emma Bourdieu, Forever, 2023", artist: "Emma Bourdieu", year: "2023", location: "", exhibition: "" },
+  { url: "hires/image67.jpg", thumb: "thumbs/image67.jpg", info: "Hudinilson Jr, Exhibition view, 2025, Echoes in Xerox, KBCB Biel-Bienne, 2025, Curated by Raphael Gygax", artist: "Hudinilson Jr", year: "2025", location: "KBCB Biel-Bienne", exhibition: "Echoes in Xerox" },
+  { url: "hires/image68.jpg", thumb: "thumbs/image68.jpg", info: "Gabriele Garavaglia, Dial (4), 2023, Long distance relationship, Smallville, 2025, Curated by Katia Leonelli & Marius Quiblier", artist: "Gabriele Garavaglia", year: "2025", location: "Smallville", exhibition: "Long distance relationship" },
+  { url: "hires/image69.jpg", thumb: "thumbs/image69.jpg", info: "Markus Jura Suisse, Exhibition view, 2024, Vorsicht, dramatischer Inhalt, Smallville, 2024, Curated by Pierre Benoît", artist: "Markus Jura Suisse", year: "2024", location: "Smallville", exhibition: "Vorsicht, dramatischer Inhalt" },
+  { url: "hires/image70.jpg", thumb: "thumbs/image70.jpg", info: "Renate Rabus, Exhibition view, 2025, Troubles, Smallville, 2025", artist: "Renate Rabus", year: "2025", location: "Smallville", exhibition: "Troubles" },
+  { url: "hires/image71.jpg", thumb: "thumbs/image71.jpg", info: "Olivier Mosset, Untitled, 2025, Smallville 10 ans, Smallville, 2025", artist: "Olivier Mosset", year: "2025", location: "Smallville", exhibition: "Smallville 10 ans" },
+  { url: "hires/image72.jpg", thumb: "thumbs/image72.jpg", info: "Gina Proenza, Nostalgie en pantoufles (detail), 2020, Agarra-diablo, CAN Centre d'art Neuchâtel, 2020, Curated by CAN team", artist: "Gina Proenza", year: "2020", location: "CAN Centre d'art Neuchâtel", exhibition: "Agarra-diablo" },
+  { url: "hires/image73.jpg", thumb: "thumbs/image73.jpg", info: "Anna Meschiari, Exhibition view, 2024, Les dialogueur.euse.x.s, Club 44, La Chaux-de-Fonds, 2024, Curated by Marie DuPasquier", artist: "Anna Meschiari", year: "2024", location: "Club 44, La Chaux-de-Fonds", exhibition: "Les dialogueur.euse.x.s" },
+  { url: "hires/image74.jpg", thumb: "thumbs/image74.jpg", info: "Old Masters, Constructionisme, performance, 2025, Smallville 10 ans, Smallville, 2025", artist: "Old Masters", year: "2025", location: "Smallville", exhibition: "Smallville 10 ans" },
+  { url: "hires/image75.jpg", thumb: "thumbs/image75.jpg", info: "Jeanne Jacob, Exhibition view, 2024, I just truly want to listen to you and myself genuinely, please doudou, CAN Centre d'art Neuchâtel, 2024", artist: "Jeanne Jacob", year: "2024", location: "CAN Centre d'art Neuchâtel", exhibition: "I just truly want to listen to you and myself genuinely, please doudou" },
+  { url: "hires/image76.jpg", thumb: "thumbs/image76.jpg", info: "Jean-Charles de Quillacq, Exhibition view, 2025, Daddy is Home, KBCB Biel-Bienne, 2025", artist: "Jean-Charles de Quillacq", year: "2025", location: "KBCB Biel-Bienne", exhibition: "Daddy is Home" },
+  { url: "hires/image77.jpg", thumb: "thumbs/image77.jpg", info: "Jeanne Jacob, Little Mouse, 2024", artist: "Jeanne Jacob", year: "", location: "", exhibition: "" },
+  { url: "hires/image78.jpg", thumb: "thumbs/image78.jpg", info: "Louis de Meuron", artist: "Louis de Meuron", year: "", location: "", exhibition: "" },
+  { url: "hires/image79.jpg", thumb: "thumbs/image79.jpg", info: "Francisco Sierra, Guppy, 2024", artist: "Francisco Sierra", year: "", location: "", exhibition: "" },
+  { url: "hires/image80.jpg", thumb: "thumbs/image80.jpg", info: "Exhibition view, 2025, Le Clou d'Or, Smallville, 2025", artist: "", year: "2025", location: "Smallville", exhibition: "Le Clou d'Or" },
+  { url: "hires/image81.jpg", thumb: "thumbs/image81.jpg", info: "Francisco Sierra, Guppy, 2024", artist: "Francisco Sierra", year: "", location: "", exhibition: "" }
+];
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+// Mélanger les images à chaque chargement de page
+// Puis trier pour alterner paysage/portrait
+const shuffledAll = shuffleArray(artworks);
+
+// Séparer approximativement en paysage/portrait
+// (Tu peux ajuster manuellement les numéros si besoin)
+const landscapes = shuffledAll.filter((a, i) => i % 2 === 0); // Images paires = paysages (approximatif)
+const portraits = shuffledAll.filter((a, i) => i % 2 !== 0);  // Images impaires = portraits (approximatif)
+
+// Alterner entre les deux groupes
+let shuffledArtworks = [];
+const maxLength = Math.max(landscapes.length, portraits.length);
+
+for (let i = 0; i < maxLength; i++) {
+  if (landscapes[i]) shuffledArtworks.push(landscapes[i]);
+  if (portraits[i]) shuffledArtworks.push(portraits[i]);
+}
+
+console.log('Artworks sorted with alternating pattern');
+
+// Variables globales
+const mosaicGrid = document.getElementById('mosaicGrid');
+let currentIndex = 0;
+let viewer = null;
+let isInitialOpen = false; // Flag pour détecter ouverture depuis mosaïque
+
+function createMosaic() {
+  console.log('Number of artworks:', shuffledArtworks.length);
+  
+  if (!mosaicGrid) {
+    console.error('Mosaic grid not found!');
+  } else {
+    shuffledArtworks.forEach((artwork, index) => {
+    const item = document.createElement('div');
+    item.className = 'mosaic-item';
+    
+    const img = document.createElement('img');
+    img.src = artwork.thumb;
+    img.alt = artwork.artist || 'Artwork';
+    img.loading = 'lazy'; // Lazy loading natif
+    img.onerror = function() {
+      console.error(`Failed to load image: ${artwork.thumb}`);
+    };
+    img.onload = function() {
+      console.log(`Successfully loaded image: ${artwork.thumb}`);
+    };
+    
+    console.log(`Creating image ${index}: ${artwork.thumb}`);
+    
+    item.appendChild(img);
+    item.addEventListener('click', () => openLightbox(index));
+    mosaicGrid.appendChild(item);
+  });
+
+  console.log('Mosaic grid children:', mosaicGrid.children.length);
+  }
+}
+
+// Appeler createMosaic pour générer la mosaïque
+createMosaic();
+
+// Gérer les paramètres URL pour ouvrir une image spécifique
+function handleURLParameters() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const imageParam = urlParams.get('image');
+  
+  if (imageParam) {
+    const imageIndex = parseInt(imageParam);
+    if (!isNaN(imageIndex) && imageIndex >= 0 && imageIndex < shuffledArtworks.length) {
+      // Attendre que la mosaïque soit créée, puis ouvrir l'image
+      setTimeout(() => {
+        openLightbox(imageIndex);
+      }, 500);
+    }
+  }
+}
+
+// Fonction pour copier le lien de partage d'une image
+function getShareLink(index) {
+  const baseUrl = window.location.origin + window.location.pathname;
+  return `${baseUrl}?image=${index}`;
+}
+
+// Appeler après création de la mosaïque
+handleURLParameters();
+
+// Gestion du lightbox
+const lightbox = document.getElementById('lightbox');
+const closeLightbox = document.getElementById('closeLightbox');
+const prevImage = document.getElementById('prevImage');
+const nextImage = document.getElementById('nextImage');
+const lightboxViewer = document.getElementById('lightboxViewer');
+const lightboxCaption = document.getElementById('lightboxCaption');
+
+function openLightbox(index) {
+  console.log('openLightbox called with index:', index);
+  currentIndex = index;
+  isInitialOpen = true; // Marquer comme ouverture depuis mosaïque
+  lightbox.classList.add('active');
+  console.log('Lightbox classList:', lightbox.classList);
+  document.body.style.overflow = 'hidden';
+  loadImage(currentIndex);
+  
+  // Add zoom-in animation
+  setTimeout(() => {
+    lightboxViewer.classList.add('zoom-in-animation');
+  }, 50);
+  
+  // Remove animation class after it completes
+  setTimeout(() => {
+    lightboxViewer.classList.remove('zoom-in-animation');
+  }, 900);
+}
+
+function closeLightboxFunc() {
+  // Add closing class for fade-out animation
+  lightbox.classList.add('closing');
+  lightbox.classList.remove('active');
+  
+  // Wait for animation to complete before cleanup
+  setTimeout(() => {
+    lightbox.classList.remove('closing');
+    document.body.style.overflow = 'auto';
+    if (viewer) {
+      viewer.destroy();
+      viewer = null;
+    }
+    lightboxViewer.innerHTML = '';
+  }, 1200); // Match the animation duration
+}
+
+function loadImage(index) {
+  console.log('loadImage called with index:', index);
+  const artwork = shuffledArtworks[index];
+  console.log('Loading artwork:', artwork);
+  
+  lightboxCaption.innerHTML = `
+    <p>${artwork.info}</p>
+  `;
+  
+  lightboxViewer.style.animation = 'none';
+  setTimeout(() => {
+    lightboxViewer.style.animation = '';
+  }, 10);
+  
+  // Cleanup existing viewer properly
+  if (viewer) {
+    try {
+      viewer.destroy();
+      console.log('Previous viewer destroyed');
+    } catch (e) {
+      console.log('Viewer cleanup error:', e);
+    }
+    viewer = null;
+  }
+  
+  // Clear and recreate container
+  const isMobile = window.innerWidth <= 768;
+  
+  // Always use OpenSeadragon, but with different settings for mobile
+  lightboxViewer.innerHTML = '<div id="osdViewer" style="width:100%; height:100%; position: absolute; top: 0; left: 0;"></div>';
+  
+  console.log('Created osdViewer div for', isMobile ? 'mobile' : 'desktop');
+  
+  // Create viewer immediately
+  try {
+    const baseConfig = {
+      id: "osdViewer",
+      prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
+      tileSources: {
+        type: "image",
+        url: artwork.url
+      },
+      showNavigationControl: false,
+      showNavigator: false,
+      minZoomLevel: 0.5,
+      maxZoomLevel: 6,
+      visibilityRatio: 1.0,
+      animationTime: 0.5,
+      springStiffness: 10,
+    };
+    
+    // Mobile-specific settings
+    if (isMobile) {
+      viewer = OpenSeadragon({
+        ...baseConfig,
+        defaultZoomLevel: 1,
+        homeFillsViewer: true,
+        constrainDuringPan: true,
+        gestureSettingsTouch: {
+          pinchToZoom: true,
+          flickEnabled: true,
+          flickMomentum: 0.4,
+          pinchRotate: false
+        },
+        // Mobile optimization
+        immediateRender: true,
+        blendTime: 0,
+        alwaysBlend: false,
+        wrapHorizontal: false,
+        wrapVertical: false,
+        showNavigationControl: false
+      });
+    } else {
+      // Desktop settings
+      viewer = OpenSeadragon({
+        ...baseConfig,
+        defaultZoomLevel: 0.7,
+        defaultZoomLevel: 0.7,
+        homeFillsViewer: true,
+        constrainDuringPan: false,
+        backgroundColor: "#fff",
+        gestureSettingsMouse: {
+          clickToZoom: false,
+          dblClickToZoom: true,
+          scrollToZoom: true,
+          flickEnabled: true,
+          flickMomentum: 0.85,
+          flickMinSpeed: 0.5
+        },
+        gestureSettingsTouch: {
+          pinchToZoom: true,
+          flickEnabled: true,
+          flickMomentum: 0.85,
+          flickMinSpeed: 0.5
+        },
+        zoomPerClick: 1.3,
+        zoomPerScroll: 1.05,
+        immediateRender: true,
+        smoothTileEdgesMinZoom: 1.5,
+        maxImageCacheCount: 200,
+        timeout: 120000,
+        pixelsPerWheelLine: 40
+      });
+    }
+    
+    // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
+  let userInteracted = false;
+  
+  viewer.addHandler('open', function() {
+    // Auto-zoom SEULEMENT si c'est l'ouverture initiale depuis la mosaïque
+    if (isInitialOpen && !userInteracted) {
+      setTimeout(() => {
+        if (isInitialOpen && !userInteracted) {
+          viewer.viewport.zoomTo(1.0, viewer.viewport.getCenter(), false);
+          isInitialOpen = false; // Désactiver pour les slides suivants
+        }
+      }, 500);
+    }
+  });
+  
+  // Detect user interaction to stop auto-zoom
+  viewer.addHandler('canvas-scroll', function() {
+    userInteracted = true;
+  });
+  
+  viewer.addHandler('canvas-drag', function() {
+    userInteracted = true;
+  });
+  
+  viewer.addHandler('canvas-pinch', function() {
+    userInteracted = true;
+  });
+  
+  // Change cursor and handle zoom events
+  viewer.addHandler('zoom', function(event) {
+    // User started interacting
+    if (event.userData) {
+      autoZoomDone = true;
+      userInteracted = true;
+    }
+    
+    // Change cursor based on zoom level
+    if (event.zoom > 0.7) {
+      lightboxViewer.classList.add('zoomed');
+    } else {
+      lightboxViewer.classList.remove('zoomed');
+    }
+    
+    // Close lightbox when zooming out too much
+    if (event.zoom < 0.25) {
+      closeLightboxFunc();
+    }
+  });
+  
+  console.log('OpenSeadragon viewer created successfully');
+  
+  // Force resize on mobile to ensure proper rendering
+  if (window.innerWidth <= 768) {
+    setTimeout(() => {
+      if (viewer && viewer.viewport) {
+        viewer.viewport.resize();
+        viewer.forceRedraw();
+        console.log('Forced mobile resize and redraw');
+      }
+    }, 100);
+  }
+  
+  } catch (error) {
+    console.error('Error creating OpenSeadragon viewer:', error);
+    alert('Error loading image: ' + error.message);
+  }
+}
+
+function showPrevImage() {
+  isInitialOpen = false; // Désactiver auto-zoom pour navigation
+  currentIndex = (currentIndex - 1 + shuffledArtworks.length) % shuffledArtworks.length;
+  loadImage(currentIndex);
+}
+
+function showNextImage() {
+  isInitialOpen = false; // Désactiver auto-zoom pour navigation
+  currentIndex = (currentIndex + 1) % shuffledArtworks.length;
+  loadImage(currentIndex);
+}
+
+// Event listeners
+closeLightbox.addEventListener('click', closeLightboxFunc);
+prevImage.addEventListener('click', showPrevImage);
+nextImage.addEventListener('click', showNextImage);
+
+document.addEventListener('keydown', (e) => {
+  if (!lightbox.classList.contains('active')) return;
+  
+  if (e.key === 'Escape') {
+    closeLightboxFunc();
+  } else if (e.key === 'ArrowLeft') {
+    showPrevImage();
+  } else if (e.key === 'ArrowRight') {
+    showNextImage();
+  }
+});
+
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) {
+    closeLightboxFunc();
+  }
+});
+
+// ============================================
+// SEARCH FUNCTIONALITY
+// ============================================
+
+// Fonction de recherche
+function performSearch() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+  const clearBtn = document.getElementById('clearSearch');
+  const resultsCount = document.getElementById('resultsCount');
+  const mosaicGrid = document.getElementById('mosaicGrid');
+  
+  // Afficher/cacher le bouton clear
+  clearBtn.style.display = searchTerm ? 'block' : 'none';
+  
+  if (!searchTerm) {
+    // Pas de recherche - afficher toutes les images
+    const items = document.querySelectorAll('.mosaic-item');
+    items.forEach(item => {
+      item.style.display = 'block';
+      item.style.visibility = 'visible';
+    });
+    resultsCount.textContent = '';
+    return;
+  }
+  
+  // Rechercher dans les artworks
+  let visibleCount = 0;
+  const items = document.querySelectorAll('.mosaic-item');
+  
+  items.forEach((item, index) => {
+    const artwork = shuffledArtworks[index];
+    const searchableText = [
+      artwork.info,
+      artwork.artist,
+      artwork.year,
+      artwork.location,
+      artwork.exhibition
+    ].join(' ').toLowerCase();
+    
+    if (searchableText.includes(searchTerm)) {
+      item.style.display = 'block';
+      item.style.visibility = 'visible';
+      visibleCount++;
+    } else {
+      item.style.display = 'none';
+      item.style.visibility = 'hidden';
+    }
+  });
+  
+  // Afficher le nombre de résultats
+  resultsCount.textContent = `${visibleCount} résultat${visibleCount > 1 ? 's' : ''}`;
+  
+  // Force grid recalculation on mobile
+  if (window.innerWidth <= 768) {
+    mosaicGrid.style.display = 'none';
+    mosaicGrid.offsetHeight; // Force reflow
+    mosaicGrid.style.display = 'grid';
+  }
+}
+
+// Event listeners pour la recherche
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearSearch');
+
+// Recherche en temps réel
+searchInput.addEventListener('input', performSearch);
+
+// Clear search
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
+   performSearch();
+  searchInput.focus();
+});
+
+// Enter pour rechercher
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    performSearch();
+  }
+});
+
+}); // End DOMContentLoaded
+</script>
+
+</body>
+</html>
