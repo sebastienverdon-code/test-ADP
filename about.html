@@ -217,8 +217,22 @@ footer {
   padding: 0;
   display: block;
   font-size: 12px;
-  min-height: 200px;
+  min-height: 120px;
   width: 100%;
+  position: relative;
+}
+
+footer a {
+  position: absolute;
+  bottom: 20px;
+  right: 50px;
+  color: #000;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+footer a:hover {
+  opacity: 0.6;
 }
 
 @media (max-width: 768px) {
@@ -311,6 +325,7 @@ footer {
 </div>
 
 <footer>
+  <a href="index.html">Back</a>
 </footer>
 
 <script>
