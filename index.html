@@ -942,12 +942,12 @@ function loadImage(index) {
   // Clear and recreate container
   const isMobile = window.innerWidth <= 768;
   
-  // Use medium resolution images on mobile to balance quality and performance
-  const imageUrl = isMobile ? artwork.url.replace('hires/', 'medium/') : artwork.url;
+  // Use Medium resolution images on mobile to balance quality and performance
+  const imageUrl = isMobile ? artwork.url.replace('hires/', 'Medium/') : artwork.url;
   
   lightboxViewer.innerHTML = '<div id="osdViewer" style="width:100%; height:100%;"></div>';
   
-  console.log('Created osdViewer div', isMobile ? 'using medium' : 'using hires');
+  console.log('Created osdViewer div', isMobile ? 'using Medium' : 'using hires');
   
   // Create viewer immediately
   try {
