@@ -66,10 +66,22 @@ header {
 }
 
 .about-content {
-  max-width: 400px;
-  margin: 0;
+  display: flex;
+  gap: 100px;
   margin-left: 50px;
-  padding: 120px 0 100px;
+  margin-right: 50px;
+  padding: 120px 0 50px;
+  min-height: calc(100vh - 170px);
+}
+
+.about-left {
+  flex: 0 0 400px;
+  max-width: 400px;
+}
+
+.about-right {
+  flex: 0 0 400px;
+  max-width: 400px;
 }
 
 h2 {
@@ -215,7 +227,17 @@ footer {
   }
   
   .about-content {
+    flex-direction: column;
     padding: 100px 15px 50px;
+    margin-left: 15px;
+    margin-right: 15px;
+    gap: 40px;
+  }
+  
+  .about-left,
+  .about-right {
+    flex: 1;
+    max-width: 100%;
   }
   
   footer {
@@ -236,51 +258,55 @@ footer {
 </header>
 
 <div class="about-content">
-  <h2>About</h2>
-  <p>Sebastian Verdon is a Switzerland-based photographer specializing in the photographic documentation of exhibitions and the reproduction of artworks. In dialogue with artists and institutions, his work aims to create a precise and objective visual archive of artworks and their exhibition contexts.</p>
-  
-  <h2>Contact</h2>
-  
-  <div class="address">
-    <p>Sebastian Verdon<br>
-    Art Documentation Photography<br>
-    Chemin des Péreuses 6<br>
-    CH–2000 Neuchâtel</p>
+  <div class="about-left">
+    <h2>About</h2>
+    <p>Sebastian Verdon is a Switzerland-based photographer specializing in the photographic documentation of exhibitions and the reproduction of artworks. In dialogue with artists and institutions, his work aims to create a precise and objective visual archive of artworks and their exhibition contexts.</p>
+    
+    <h2>Contact</h2>
+    
+    <div class="address">
+      <p>Sebastian Verdon<br>
+      Art Documentation Photography<br>
+      Chemin des Péreuses 6<br>
+      CH–2000 Neuchâtel</p>
+    </div>
+    
+    <div class="image-credits">
+      <p>All images courtesy the Artists, the Art Spaces, the Galleries, the Museums and Sebastian Verdon.</p>
+    </div>
+    
+    <div class="privacy-notice">
+      <h2>Privacy</h2>
+      <p>This website does not collect any personal data and does not use cookies. Contact form submissions are processed by Formspree. No tracking or analytics tools are used.</p>
+    </div>
   </div>
   
-  <form class="contact-form" id="contactForm" action="https://formspree.io/f/xkovjbrb" method="POST">
-    <div class="form-group">
-      <label for="name">Name *</label>
-      <input type="text" id="name" name="name" required>
-    </div>
-    
-    <div class="form-group">
-      <label for="email">Email *</label>
-      <input type="email" id="email" name="_replyto" required>
-    </div>
-    
-    <div class="form-group">
-      <label for="subject">Subject</label>
-      <input type="text" id="subject" name="_subject">
-    </div>
-    
-    <div class="form-group">
-      <label for="message">Message *</label>
-      <textarea id="message" name="message" required></textarea>
-    </div>
-    
-    <button type="submit" class="submit-btn">Send Message</button>
-    
-    <div id="formMessage" class="form-message" style="display: none;"></div>
-  </form>
-  
-  <div class="image-credits">
-    <p>All images courtesy the Artists, the Art Spaces, the Galleries, the Museums and Sebastian Verdon.</p>
-  </div>
-  
-  <div class="privacy-notice">
-    <h2>Privacy</h2>
-    <p>This website does not collect any personal data and does not use cookies. Contact form submissions are processed by Formspree. No tracking or analytics tools are used.</p>
+  <div class="about-right">
+    <form class="contact-form" id="contactForm" action="https://formspree.io/f/xkovjbrb" method="POST">
+      <div class="form-group">
+        <label for="name">Name *</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="_replyto" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="_subject">
+      </div>
+      
+      <div class="form-group">
+        <label for="message">Message *</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      
+      <button type="submit" class="submit-btn">Send Message</button>
+      
+      <div id="formMessage" class="form-message" style="display: none;"></div>
+    </form>
   </div>
 </div>
 

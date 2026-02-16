@@ -97,8 +97,6 @@ header {
   gap: 50px;
   width: 100%;
   min-height: 300px;
-  max-height: calc((300px * 3) + (50px * 2) + 100px);
-  overflow: hidden;
   background: #fff;
   padding: 50px;
   justify-content: start;
@@ -524,8 +522,6 @@ footer a:hover {
     grid-template-columns: 1fr;
     gap: 30px;
     padding: 30px;
-    max-height: calc((300px * 12) + (30px * 11) + 60px);
-    overflow: hidden;
   }
   
   .gallery {
@@ -682,9 +678,6 @@ footer a:hover {
 
 <!-- Footer -->
 <footer>
-  <div class="footer-info">
-    <p>© 2026 all rights reserved</p>
-  </div>
   <a href="about.html">About</a>
 </footer>
 
@@ -976,24 +969,24 @@ function loadImage(index) {
       dblClickToZoom: true,
       scrollToZoom: true,
       flickEnabled: true,
-      flickMomentum: 0.85,
-      flickMinSpeed: 0.5
+      flickMomentum: 0.9,
+      flickMinSpeed: 0.3
     },
     gestureSettingsTouch: {
       pinchToZoom: true,
       flickEnabled: true,
-      flickMomentum: 0.85,
-      flickMinSpeed: 0.5
+      flickMomentum: 0.9,
+      flickMinSpeed: 0.3
     },
-    animationTime: 2.0,
-    springStiffness: 3,
-    zoomPerClick: 1.2,
-    zoomPerScroll: 1.02,
+    animationTime: 1.2,
+    springStiffness: 6.5,
+    zoomPerClick: 1.4,
+    zoomPerScroll: 1.08,
     immediateRender: true,
     smoothTileEdgesMinZoom: 1.5,
     maxImageCacheCount: 200,
     timeout: 120000,
-    pixelsPerWheelLine: 20
+    pixelsPerWheelLine: 30
   });
     
   // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
