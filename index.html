@@ -940,9 +940,14 @@ function loadImage(index) {
   }
   
   // Clear and recreate container
+  const isMobile = window.innerWidth <= 768;
+  
+  // Use medium resolution images on mobile to balance quality and performance
+  const imageUrl = isMobile ? artwork.url.replace('hires/', 'medium/') : artwork.url;
+  
   lightboxViewer.innerHTML = '<div id="osdViewer" style="width:100%; height:100%;"></div>';
   
-  console.log('Created osdViewer div');
+  console.log('Created osdViewer div', isMobile ? 'using medium' : 'using hires');
   
   // Create viewer immediately
   try {
@@ -951,7 +956,7 @@ function loadImage(index) {
     prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
     tileSources: {
       type: "image",
-      url: artwork.url
+      url: imageUrl
     },
     showNavigationControl: false,
     showNavigator: false,
