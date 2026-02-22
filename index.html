@@ -10,19 +10,35 @@
 <meta name="keywords" content="Sebastian Verdon, photographe art contemporain, documentation exposition, photographie galerie, Suisse, Neuchâtel, Anna Meschiari, Baker Wardlaw, Barbezat-Villetard, Benedikt Bock, Bert Huyghe, Carmen D'Apollonio, Costa Vece, Denis Savary, Elise Corpataux, Emma Bourdieu, Eva Zornio, Fabian Boschung, Francisco Sierra, François Jaques, Gabriele Garavaglia, Gilles Jacot, Gina Proenza, Hudinilson Jr, Jean-Charles de Quillacq, Jeanne Jacob, Jeanne Tara, Jon Merz, Jorge Raka, Karim Noureldin, Lauryn Youden, Linda Voorwinde, Lou Masduraud, Louis de Meuron, Maria Guta, Lauren Huret, Markus Jura Suisse, Martin Chramosta, Mathis Gasser, Nam June Paik, Nina Rieben, Noemi Pfister, Nolan Oswald Dennis, Old Masters, Olivier Mosset, Paloma Proudfoot, Pamela Rosenkranz, Renate Rabus, Renaud Loda, Slavs and Tatars, Tabita Rezaire, Théa Giglio, Timo Ullmann, René Müller, Urban Zellweger, Valentin Carron, Virginie Sistek, Véronique Goël, Walead Beshty, Ximena Garrido-Lecca, Yannic Joray, Youssef Limoud, Zsófia Keresztes, Agarra-diablo, Alfombra, Art en plein air, Barbara, Corniche, Daddy is Home, Désordre sacré, Echoes in Xerox, Exercice de parade, Honest Work, Hot Shots, Klang der Erde, Kunst am Bau, Le Clou d'Or, Les dialogueur.euse.x.s, Life lives in gaps, Long distance relationship, L'Effet de serre, Mehr Licht, Never confuse shit for cioccolato, No Center, Of Course, Parallels, Reverse Engineering, Smallville, Troubles, Vorsicht, quartz crisis, CAN Centre d'art Neuchâtel, Kunsthalle Appenzell, Kunstmuseum Solothurn, Kunstmuseum Appenzell, Abbatiale Bellelay, EAC les halles, KBCB Biel-Bienne, Smallville">
 <meta name="author" content="Sebastian Verdon">
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://sebastianverdon.ch">
-<meta property="og:title" content="Sebastian Verdon – Art Documentation Photography">
-<meta property="og:description" content="Sebastian Verdon, Art Documentation Photography.">
-<meta property="og:image" content="https://sebastianverdon.ch/thumbs/image1.jpg">
+<script>
+// Dynamic Open Graph image - changes on each page load
+const randomImageNumber = Math.floor(Math.random() * 87) + 1;
+const ogImageUrl = `https://sebastianverdon.ch/thumbs/image${randomImageNumber}.jpg`;
+document.write('<meta property="og:type" content="website">');
+document.write('<meta property="og:url" content="https://sebastianverdon.ch">');
+document.write('<meta property="og:title" content="Sebastian Verdon – Art Documentation Photography">');
+document.write('<meta property="og:description" content="Sebastian Verdon, Art Documentation Photography.">');
+document.write(`<meta property="og:image" content="${ogImageUrl}">`);
+document.write('<meta property="twitter:card" content="summary_large_image">');
+document.write('<meta property="twitter:url" content="https://sebastianverdon.ch">');
+document.write('<meta property="twitter:title" content="Sebastian Verdon – Art Documentation Photography">');
+document.write('<meta property="twitter:description" content="Sebastian Verdon, Art Documentation Photography.">');
+document.write(`<meta property="twitter:image" content="${ogImageUrl}">`);
+</script>
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://sebastianverdon.ch">
-<meta property="twitter:title" content="Sebastian Verdon – Art Documentation Photography">
-<meta property="twitter:description" content="Sebastian Verdon, Art Documentation Photography.">
-<meta property="twitter:image" content="https://sebastianverdon.ch/thumbs/image1.jpg">
+<!-- Fallback Open Graph for crawlers that don't execute JavaScript -->
+<noscript>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sebastianverdon.ch">
+  <meta property="og:title" content="Sebastian Verdon – Art Documentation Photography">
+  <meta property="og:description" content="Sebastian Verdon, Art Documentation Photography.">
+  <meta property="og:image" content="https://sebastianverdon.ch/thumbs/image1.jpg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://sebastianverdon.ch">
+  <meta property="twitter:title" content="Sebastian Verdon – Art Documentation Photography">
+  <meta property="twitter:description" content="Sebastian Verdon, Art Documentation Photography.">
+  <meta property="twitter:image" content="https://sebastianverdon.ch/thumbs/image1.jpg">
+</noscript>
 
 <!-- Canonical URL -->
 <link rel="canonical" href="https://sebastianverdon.ch">
@@ -1173,7 +1189,6 @@ function performSearch() {
   const clearBtn = document.getElementById('clearSearch');
   const resultsCount = document.getElementById('resultsCount');
   const mosaicGrid = document.getElementById('mosaicGrid');
-  const searchInput = document.getElementById('searchInput');
   
   // Afficher/cacher le bouton clear
   clearBtn.style.display = searchTerm ? 'block' : 'none';
@@ -1188,9 +1203,6 @@ function performSearch() {
     resultsCount.textContent = '';
     return;
   }
-  
-  // Retirer le focus du champ de recherche pour éviter le zoom sur mobile
-  searchInput.blur();
   
   // Rechercher dans les artworks
   let visibleCount = 0;
@@ -1219,9 +1231,6 @@ function performSearch() {
   // Afficher le nombre de résultats
   resultsCount.textContent = `${visibleCount} résultat${visibleCount > 1 ? 's' : ''}`;
   
-  // Scroll to top to show results
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  
   // Force grid recalculation on mobile
   if (window.innerWidth <= 768) {
     mosaicGrid.style.display = 'none';
@@ -1244,10 +1253,13 @@ clearBtn.addEventListener('click', () => {
   searchInput.focus();
 });
 
-// Enter pour rechercher
+// Enter pour rechercher et retirer le focus
 searchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     performSearch();
+    // Retirer le focus et scroller en haut quand on valide avec Entrée
+    searchInput.blur();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
 
