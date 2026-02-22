@@ -475,7 +475,38 @@ footer a:hover {
   color: #333;
 }
 
-/* Responsive */
+/* Responsive - Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mosaic-grid {
+    grid-template-columns: repeat(3, 300px);
+    gap: 40px;
+    padding: 40px;
+  }
+  
+  header {
+    padding: 20px 40px;
+  }
+  
+  .search-input {
+    width: 200px;
+  }
+  
+  .search-input:focus {
+    width: 280px;
+  }
+  
+  .lightbox-viewer {
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    margin: 20px;
+  }
+  
+  .lightbox-caption {
+    padding: 15px 30px;
+  }
+}
+
+/* Responsive - Mobile */
 @media (max-width: 768px) {
   .search-input {
     width: 150px;
@@ -490,26 +521,6 @@ footer a:hover {
     display: none;
   }
   
-  .mosaic-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 15px;
-    padding: 15px;
-  }
-  
-  .mosaic-item {
-    aspect-ratio: 4/3;
-    min-width: 0; /* Fix for grid overflow */
-  }
-  
-  .mosaic-item[style*="display: none"] {
-    display: none !important;
-  }
-  
-  .mosaic-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
   header {
     padding: 15px 20px;
   }
@@ -522,6 +533,21 @@ footer a:hover {
     grid-template-columns: 1fr;
     gap: 30px;
     padding: 30px;
+  }
+  
+  .mosaic-item {
+    aspect-ratio: 4/3;
+    min-width: 0;
+  }
+  
+  .mosaic-item[style*="display: none"] {
+    display: none !important;
+  }
+  
+  .mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   
   .gallery {
