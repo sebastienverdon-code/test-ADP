@@ -1253,13 +1253,10 @@ clearBtn.addEventListener('click', () => {
   searchInput.focus();
 });
 
-// Enter pour rechercher et retirer le focus
+// Enter pour rechercher
 searchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     performSearch();
-    // Retirer le focus et scroller en haut quand on valide avec Entrée
-    searchInput.blur();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
 
