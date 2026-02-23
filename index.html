@@ -491,6 +491,46 @@ footer a:hover {
   color: #333;
 }
 
+/* Autocomplete dropdown */
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.autocomplete-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.autocomplete-item:hover {
+  background: #f5f5f5;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-label {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 8px;
+}
+
 /* Responsive - Tablet Portrait (iPad, tablettes) */
 @media (min-width: 769px) and (max-width: 1280px) and (orientation: portrait) {
   .mosaic-grid {
@@ -735,7 +775,8 @@ footer a:hover {
     
     <!-- Search Bar -->
     <div class="search-container">
-      <input type="text" class="search-input" id="searchInput" placeholder="Rechercher...">
+      <input type="text" class="search-input" id="searchInput" placeholder="Rechercher..." autocomplete="off">
+      <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
       <span class="search-results-count" id="resultsCount"></span>
       <button class="clear-search" id="clearSearch" style="display:none;">×</button>
     </div>
@@ -1240,17 +1281,117 @@ function performSearch() {
   }
 }
 
+// ============================================
+// AUTOCOMPLETE FUNCTIONALITY
+// ============================================
+
+// Build autocomplete suggestions from artworks
+function buildAutocompleteSuggestions() {
+  const suggestions = {
+    artists: new Set(),
+    exhibitions: new Set(),
+    locations: new Set()
+  };
+  
+  artworks.forEach(artwork => {
+    if (artwork.artist) suggestions.artists.add(artwork.artist);
+    if (artwork.exhibition) suggestions.exhibitions.add(artwork.exhibition);
+    if (artwork.location) suggestions.locations.add(artwork.location);
+  });
+  
+  return {
+    artists: Array.from(suggestions.artists).sort(),
+    exhibitions: Array.from(suggestions.exhibitions).sort(),
+    locations: Array.from(suggestions.locations).sort()
+  };
+}
+
+const autocompleteSuggestions = buildAutocompleteSuggestions();
+
+function showAutocomplete(searchTerm) {
+  const dropdown = document.getElementById('autocompleteDropdown');
+  
+  if (!searchTerm || searchTerm.length < 2) {
+    dropdown.style.display = 'none';
+    return;
+  }
+  
+  const term = searchTerm.toLowerCase();
+  const matches = {
+    artists: autocompleteSuggestions.artists.filter(a => a.toLowerCase().includes(term)),
+    exhibitions: autocompleteSuggestions.exhibitions.filter(e => e.toLowerCase().includes(term)),
+    locations: autocompleteSuggestions.locations.filter(l => l.toLowerCase().includes(term))
+  };
+  
+  const totalMatches = matches.artists.length + matches.exhibitions.length + matches.locations.length;
+  
+  if (totalMatches === 0) {
+    dropdown.style.display = 'none';
+    return;
+  }
+  
+  let html = '';
+  
+  if (matches.artists.length > 0) {
+    matches.artists.slice(0, 5).forEach(artist => {
+      html += `<div class="autocomplete-item" data-value="${artist}"><span class="autocomplete-label">Artiste</span>${artist}</div>`;
+    });
+  }
+  
+  if (matches.exhibitions.length > 0) {
+    matches.exhibitions.slice(0, 5).forEach(exhibition => {
+      html += `<div class="autocomplete-item" data-value="${exhibition}"><span class="autocomplete-label">Expo</span>${exhibition}</div>`;
+    });
+  }
+  
+  if (matches.locations.length > 0) {
+    matches.locations.slice(0, 3).forEach(location => {
+      html += `<div class="autocomplete-item" data-value="${location}"><span class="autocomplete-label">Lieu</span>${location}</div>`;
+    });
+  }
+  
+  dropdown.innerHTML = html;
+  dropdown.style.display = 'block';
+  
+  // Add click listeners to autocomplete items
+  dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const value = item.getAttribute('data-value');
+      document.getElementById('searchInput').value = value;
+      performSearch();
+      dropdown.style.display = 'none';
+    });
+  });
+}
+
+// ============================================
+// SEARCH FUNCTIONALITY
+// ============================================
+
 // Event listeners pour la recherche
 const searchInput = document.getElementById('searchInput');
 const clearBtn = document.getElementById('clearSearch');
 
-// Recherche en temps réel
-searchInput.addEventListener('input', performSearch);
+// Recherche en temps réel + autocomplete
+searchInput.addEventListener('input', (e) => {
+  const value = e.target.value;
+  showAutocomplete(value);
+  performSearch();
+});
+
+// Hide autocomplete when clicking outside
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('autocompleteDropdown');
+  if (!e.target.closest('.search-container')) {
+    dropdown.style.display = 'none';
+  }
+});
 
 // Clear search
 clearBtn.addEventListener('click', () => {
   searchInput.value = '';
-   performSearch();
+  performSearch();
+  document.getElementById('autocompleteDropdown').style.display = 'none';
   searchInput.focus();
 });
 
