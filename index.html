@@ -1245,8 +1245,7 @@ let touchStartY = 0;
 let touchEndY = 0;
 let isSwiping = false;
 
-const lightboxViewer = document.getElementById('lightboxViewer');
-
+// Use existing lightboxViewer reference
 lightboxViewer.addEventListener('touchstart', (e) => {
   // Only track single touch (not pinch/zoom)
   if (e.touches.length === 1) {
