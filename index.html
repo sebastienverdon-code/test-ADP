@@ -601,6 +601,11 @@ footer a:hover {
 
 /* Responsive - Mobile */
 @media (max-width: 768px) {
+  .search-container {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  
   .search-input {
     width: 150px;
     font-size: 14px;
@@ -608,10 +613,6 @@ footer a:hover {
   
   .search-input:focus {
     width: 200px;
-  }
-  
-  .search-container {
-    flex-wrap: wrap;
   }
   
   .search-results-count {
