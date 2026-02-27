@@ -714,12 +714,13 @@ footer a:hover {
     color: #333;
   }
   
+  /* Hide navigation controls on mobile - swipe gestures replace them */
   .lightbox-close {
-    top: 15px;
-    right: 15px;
-    width: 35px;
-    height: 35px;
-    font-size: 32px;
+    display: none;
+  }
+  
+  .lightbox-nav {
+    display: none;
   }
   
   .lightbox-viewer {
@@ -1274,8 +1275,13 @@ lightboxViewer.addEventListener('touchend', (e) => {
   const swipeDistanceX = touchEndX - touchStartX;
   const swipeDistanceY = touchEndY - touchStartY;
   
-  // Only trigger swipe if horizontal movement is greater than vertical
-  if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY) && Math.abs(swipeDistanceX) > swipeThreshold) {
+  // Check for vertical swipe down to close
+  if (Math.abs(swipeDistanceY) > Math.abs(swipeDistanceX) && swipeDistanceY > swipeThreshold) {
+    // Swipe down - close lightbox
+    closeLightboxFunc();
+  }
+  // Only trigger horizontal swipe if horizontal movement is greater than vertical
+  else if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY) && Math.abs(swipeDistanceX) > swipeThreshold) {
     if (swipeDistanceX > 0) {
       // Swipe right - previous image
       showPrevImage();
@@ -1287,6 +1293,13 @@ lightboxViewer.addEventListener('touchend', (e) => {
   
   isSwiping = false;
 }, { passive: true });
+
+// Tap on caption to close lightbox on mobile
+document.getElementById('lightboxCaption').addEventListener('click', () => {
+  if (window.innerWidth <= 768) {
+    closeLightboxFunc();
+  }
+});
 
 document.addEventListener('keydown', (e) => {
   if (!lightbox.classList.contains('active')) return;
