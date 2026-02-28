@@ -1270,17 +1270,12 @@ lightboxViewer.addEventListener('touchend', (e) => {
   touchEndX = e.changedTouches[0].clientX;
   touchEndY = e.changedTouches[0].clientY;
   
-  const swipeThreshold = 230; // Increased to 230px - very deliberate swipe required
+  const swipeThreshold = 230; // Very deliberate swipe required
   const swipeDistanceX = touchEndX - touchStartX;
   const swipeDistanceY = touchEndY - touchStartY;
   
-  // Check for vertical swipe down to close
-  if (Math.abs(swipeDistanceY) > Math.abs(swipeDistanceX) && swipeDistanceY > swipeThreshold) {
-    // Swipe down - close lightbox
-    closeLightboxFunc();
-  }
   // Only trigger horizontal swipe if horizontal movement is greater than vertical
-  else if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY) && Math.abs(swipeDistanceX) > swipeThreshold) {
+  if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY) && Math.abs(swipeDistanceX) > swipeThreshold) {
     if (swipeDistanceX > 0) {
       // Swipe right - previous image
       showPrevImage();
