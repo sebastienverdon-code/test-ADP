@@ -131,8 +131,8 @@ header {
 
 .mosaic-item img {
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -645,7 +645,6 @@ footer a:hover {
   
   .mosaic-item {
     min-width: 0;
-    aspect-ratio: auto;
   }
   
   .mosaic-item[style*="display: none"] {
@@ -654,8 +653,8 @@ footer a:hover {
   
   .mosaic-item img {
     width: 100%;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
   }
   
   .gallery {
@@ -990,10 +989,13 @@ function sortByOrientation(artworks) {
         const ratio = this.width / this.height;
         
         if (ratio > 1.1) {
+          artwork.orientation = 'landscape';
           landscape.push(artwork);
         } else if (ratio < 0.9) {
+          artwork.orientation = 'portrait';
           portrait.push(artwork);
         } else {
+          artwork.orientation = 'square';
           square.push(artwork);
         }
         
@@ -1005,6 +1007,7 @@ function sortByOrientation(artworks) {
       };
       img.onerror = function() {
         // If image fails, put it at the end
+        artwork.orientation = 'square';
         square.push(artwork);
         processed++;
         if (processed === artworks.length) {
@@ -1030,6 +1033,15 @@ sortByOrientation(shuffledArtworks).then(sortedArtworks => {
     shuffledArtworks.forEach((artwork, index) => {
     const item = document.createElement('div');
     item.className = 'mosaic-item';
+    
+    // Set aspect ratio based on orientation
+    if (artwork.orientation === 'landscape') {
+      item.style.aspectRatio = '4/3';
+    } else if (artwork.orientation === 'portrait') {
+      item.style.aspectRatio = '3/4';
+    } else {
+      item.style.aspectRatio = '1/1';
+    }
     
     const img = document.createElement('img');
     img.src = artwork.thumb;
