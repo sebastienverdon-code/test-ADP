@@ -974,9 +974,8 @@ let isInitialOpen = false; // Flag pour détecter ouverture depuis mosaïque
 
 function createMosaic() {
   console.log('Number of artworks:', shuffledArtworks.length);
-// Sort artworks by orientation (landscape first, then portrait)
+// Sort artworks by orientation and shuffle within each group
 function sortByOrientation(artworks) {
-  // We'll detect orientation when images load, but for now create a promise-based approach
   return new Promise((resolve) => {
     const landscape = [];
     const portrait = [];
@@ -1001,17 +1000,80 @@ function sortByOrientation(artworks) {
         
         processed++;
         if (processed === artworks.length) {
-          // Sort complete: landscape → portrait → square
-          resolve([...landscape, ...portrait, ...square]);
+          // Shuffle within each orientation group
+          const shuffleLandscape = landscape.sort(() => Math.random() - 0.5);
+          const shufflePortrait = portrait.sort(() => Math.random() - 0.5);
+          const shuffleSquare = square.sort(() => Math.random() - 0.5);
+          
+          // Mix rows: alternate between landscape and portrait rows
+          const result = [];
+          const landscapePerRow = 4; // 4 landscape images per row
+          const portraitPerRow = 4; // 4 portrait images per row
+          
+          let lIndex = 0;
+          let pIndex = 0;
+          let useLandscape = Math.random() > 0.5; // Random start
+          
+          while (lIndex < shuffleLandscape.length || pIndex < shufflePortrait.length) {
+            if (useLandscape && lIndex < shuffleLandscape.length) {
+              // Add a row of landscape images
+              for (let i = 0; i < landscapePerRow && lIndex < shuffleLandscape.length; i++) {
+                result.push(shuffleLandscape[lIndex++]);
+              }
+              useLandscape = false;
+            } else if (!useLandscape && pIndex < shufflePortrait.length) {
+              // Add a row of portrait images
+              for (let i = 0; i < portraitPerRow && pIndex < shufflePortrait.length; i++) {
+                result.push(shufflePortrait[pIndex++]);
+              }
+              useLandscape = true;
+            } else {
+              // Switch if one group is exhausted
+              useLandscape = !useLandscape;
+            }
+          }
+          
+          // Add squares at the end
+          result.push(...shuffleSquare);
+          
+          resolve(result);
         }
       };
       img.onerror = function() {
-        // If image fails, put it at the end
         artwork.orientation = 'square';
         square.push(artwork);
         processed++;
         if (processed === artworks.length) {
-          resolve([...landscape, ...portrait, ...square]);
+          const shuffleLandscape = landscape.sort(() => Math.random() - 0.5);
+          const shufflePortrait = portrait.sort(() => Math.random() - 0.5);
+          const shuffleSquare = square.sort(() => Math.random() - 0.5);
+          
+          const result = [];
+          const landscapePerRow = 4;
+          const portraitPerRow = 4;
+          
+          let lIndex = 0;
+          let pIndex = 0;
+          let useLandscape = Math.random() > 0.5;
+          
+          while (lIndex < shuffleLandscape.length || pIndex < shufflePortrait.length) {
+            if (useLandscape && lIndex < shuffleLandscape.length) {
+              for (let i = 0; i < landscapePerRow && lIndex < shuffleLandscape.length; i++) {
+                result.push(shuffleLandscape[lIndex++]);
+              }
+              useLandscape = false;
+            } else if (!useLandscape && pIndex < shufflePortrait.length) {
+              for (let i = 0; i < portraitPerRow && pIndex < shufflePortrait.length; i++) {
+                result.push(shufflePortrait[pIndex++]);
+              }
+              useLandscape = true;
+            } else {
+              useLandscape = !useLandscape;
+            }
+          }
+          
+          result.push(...shuffleSquare);
+          resolve(result);
         }
       };
       img.src = artwork.thumb;
@@ -1022,10 +1084,10 @@ function sortByOrientation(artworks) {
 // Shuffle and create mosaic
 shuffledArtworks = artworks.slice();
 
-// Sort by orientation instead of shuffling
+// Sort by orientation and shuffle within groups
 sortByOrientation(shuffledArtworks).then(sortedArtworks => {
   shuffledArtworks = sortedArtworks;
-  console.log('Artworks sorted by orientation');
+  console.log('Artworks organized by orientation rows');
   
   if (!mosaicGrid) {
     console.error('Mosaic grid not found!');
