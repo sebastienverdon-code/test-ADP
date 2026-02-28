@@ -1322,6 +1322,11 @@ function loadImage(index) {
   });
   
   function applyZoomInertia() {
+    // Don't apply inertia if auto-zooming
+    if (isAutoZooming) {
+      return;
+    }
+    
     let currentVelocity = zoomVelocity;
     const friction = 0.92; // Friction coefficient (0.92 = smooth deceleration)
     const minVelocity = 0.00005; // Stop when velocity is very small
@@ -1346,18 +1351,42 @@ function loadImage(index) {
     }, 16); // ~60fps
   }
   
-  // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque (desktop only)
+  // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
   let userInteracted = false;
+  let isAutoZooming = false; // Flag to disable inertia during auto-zoom
   
   viewer.addHandler('open', function() {
-    // Auto-zoom SEULEMENT si c'est l'ouverture initiale depuis la mosaïque ET sur desktop
-    if (isInitialOpen && !userInteracted && window.innerWidth > 768) {
+    // Auto-zoom SEULEMENT si c'est l'ouverture initiale depuis la mosaïque
+    if (isInitialOpen && !userInteracted) {
+      isAutoZooming = true; // Disable inertia during auto-zoom
+      
+      const isMobile = window.innerWidth <= 768;
+      const delay = isMobile ? 800 : 500; // Longer delay on mobile
+      
       setTimeout(() => {
         if (isInitialOpen && !userInteracted) {
-          viewer.viewport.zoomTo(1.0, viewer.viewport.getCenter(), false);
+          // On mobile, use slower zoom with custom animation
+          if (isMobile) {
+            // Very slow zoom on mobile
+            viewer.viewport.zoomTo(1.0, viewer.viewport.getCenter(), false);
+            
+            // Re-enable inertia after auto-zoom completes (extra time for mobile)
+            setTimeout(() => {
+              isAutoZooming = false;
+            }, 2500); // 2.5s for mobile (animationTime 1.9s + buffer)
+          } else {
+            // Normal zoom on desktop
+            viewer.viewport.zoomTo(1.0, viewer.viewport.getCenter(), false);
+            setTimeout(() => {
+              isAutoZooming = false;
+            }, 1500);
+          }
+          
           isInitialOpen = false; // Désactiver pour les slides suivants
+        } else {
+          isAutoZooming = false;
         }
-      }, 500);
+      }, delay);
     }
   });
   
