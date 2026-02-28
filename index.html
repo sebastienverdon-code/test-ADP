@@ -1279,6 +1279,78 @@ function loadImage(index) {
     pixelsPerWheelLine: 30
   });
     
+  // Custom pinch zoom inertia
+  let lastZoomLevel = 0;
+  let lastZoomTime = 0;
+  let zoomVelocity = 0;
+  let isZooming = false;
+  let zoomInertiaInterval = null;
+  
+  // Track zoom changes to calculate velocity
+  viewer.addHandler('zoom', function(event) {
+    const currentTime = Date.now();
+    const currentZoom = event.zoom;
+    
+    if (lastZoomTime > 0) {
+      const timeDelta = currentTime - lastZoomTime;
+      const zoomDelta = currentZoom - lastZoomLevel;
+      
+      // Calculate velocity (zoom change per millisecond)
+      if (timeDelta > 0) {
+        zoomVelocity = zoomDelta / timeDelta;
+      }
+    }
+    
+    lastZoomLevel = currentZoom;
+    lastZoomTime = currentTime;
+    isZooming = true;
+    
+    // Clear any existing inertia
+    if (zoomInertiaInterval) {
+      clearInterval(zoomInertiaInterval);
+      zoomInertiaInterval = null;
+    }
+  });
+  
+  // Detect when pinch ends (no zoom events for a short time)
+  let zoomTimeout = null;
+  viewer.addHandler('zoom', function() {
+    clearTimeout(zoomTimeout);
+    
+    zoomTimeout = setTimeout(function() {
+      // Pinch has ended, apply inertia if velocity is significant
+      if (Math.abs(zoomVelocity) > 0.0001 && window.innerWidth <= 768) {
+        applyZoomInertia();
+      }
+      isZooming = false;
+    }, 50); // 50ms without zoom = pinch ended
+  });
+  
+  function applyZoomInertia() {
+    let currentVelocity = zoomVelocity;
+    const friction = 0.92; // Friction coefficient (0.92 = smooth deceleration)
+    const minVelocity = 0.00005; // Stop when velocity is very small
+    
+    zoomInertiaInterval = setInterval(function() {
+      // Apply friction
+      currentVelocity *= friction;
+      
+      // Stop if velocity too small
+      if (Math.abs(currentVelocity) < minVelocity) {
+        clearInterval(zoomInertiaInterval);
+        zoomInertiaInterval = null;
+        return;
+      }
+      
+      // Continue zooming with decreasing velocity
+      const currentZoom = viewer.viewport.getZoom();
+      const newZoom = currentZoom + (currentVelocity * 16); // 16ms per frame
+      
+      // Apply zoom smoothly
+      viewer.viewport.zoomTo(newZoom, null, true); // true = immediately
+    }, 16); // ~60fps
+  }
+  
   // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
   let userInteracted = false;
   
