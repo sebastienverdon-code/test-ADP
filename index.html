@@ -975,6 +975,54 @@ let isInitialOpen = false; // Flag pour détecter ouverture depuis mosaïque
 
 function createMosaic() {
   console.log('Number of artworks:', shuffledArtworks.length);
+// Sort artworks by orientation (landscape first, then portrait)
+function sortByOrientation(artworks) {
+  // We'll detect orientation when images load, but for now create a promise-based approach
+  return new Promise((resolve) => {
+    const landscape = [];
+    const portrait = [];
+    const square = [];
+    let processed = 0;
+    
+    artworks.forEach((artwork, index) => {
+      const img = new Image();
+      img.onload = function() {
+        const ratio = this.width / this.height;
+        
+        if (ratio > 1.1) {
+          landscape.push(artwork);
+        } else if (ratio < 0.9) {
+          portrait.push(artwork);
+        } else {
+          square.push(artwork);
+        }
+        
+        processed++;
+        if (processed === artworks.length) {
+          // Sort complete: landscape → portrait → square
+          resolve([...landscape, ...portrait, ...square]);
+        }
+      };
+      img.onerror = function() {
+        // If image fails, put it at the end
+        square.push(artwork);
+        processed++;
+        if (processed === artworks.length) {
+          resolve([...landscape, ...portrait, ...square]);
+        }
+      };
+      img.src = artwork.thumb;
+    });
+  });
+}
+
+// Shuffle and create mosaic
+shuffledArtworks = artworks.slice();
+
+// Sort by orientation instead of shuffling
+sortByOrientation(shuffledArtworks).then(sortedArtworks => {
+  shuffledArtworks = sortedArtworks;
+  console.log('Artworks sorted by orientation');
   
   if (!mosaicGrid) {
     console.error('Mosaic grid not found!');
@@ -1003,6 +1051,7 @@ function createMosaic() {
 
   console.log('Mosaic grid children:', mosaicGrid.children.length);
   }
+});
 }
 
 // Appeler createMosaic pour générer la mosaïque
