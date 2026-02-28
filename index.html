@@ -981,9 +981,59 @@ function sortByOrientation(artworks) {
     const portrait = [];
     const square = [];
     let processed = 0;
+    const timeout = 10000; // 10 second timeout
+    
+    // Fallback in case images don't load
+    const timeoutId = setTimeout(() => {
+      console.warn('Image loading timeout, using fallback');
+      // Treat unprocessed as square
+      for (let i = processed; i < artworks.length; i++) {
+        artworks[i].orientation = 'square';
+        square.push(artworks[i]);
+      }
+      finishSorting();
+    }, timeout);
+    
+    function finishSorting() {
+      clearTimeout(timeoutId);
+      
+      // Shuffle within each orientation group
+      const shuffleLandscape = landscape.sort(() => Math.random() - 0.5);
+      const shufflePortrait = portrait.sort(() => Math.random() - 0.5);
+      const shuffleSquare = square.sort(() => Math.random() - 0.5);
+      
+      // Mix rows: alternate between landscape and portrait rows
+      const result = [];
+      const landscapePerRow = 4;
+      const portraitPerRow = 4;
+      
+      let lIndex = 0;
+      let pIndex = 0;
+      let useLandscape = Math.random() > 0.5;
+      
+      while (lIndex < shuffleLandscape.length || pIndex < shufflePortrait.length) {
+        if (useLandscape && lIndex < shuffleLandscape.length) {
+          for (let i = 0; i < landscapePerRow && lIndex < shuffleLandscape.length; i++) {
+            result.push(shuffleLandscape[lIndex++]);
+          }
+          useLandscape = false;
+        } else if (!useLandscape && pIndex < shufflePortrait.length) {
+          for (let i = 0; i < portraitPerRow && pIndex < shufflePortrait.length; i++) {
+            result.push(shufflePortrait[pIndex++]);
+          }
+          useLandscape = true;
+        } else {
+          useLandscape = !useLandscape;
+        }
+      }
+      
+      result.push(...shuffleSquare);
+      resolve(result);
+    }
     
     artworks.forEach((artwork, index) => {
       const img = new Image();
+      
       img.onload = function() {
         const ratio = this.width / this.height;
         
@@ -1000,82 +1050,27 @@ function sortByOrientation(artworks) {
         
         processed++;
         if (processed === artworks.length) {
-          // Shuffle within each orientation group
-          const shuffleLandscape = landscape.sort(() => Math.random() - 0.5);
-          const shufflePortrait = portrait.sort(() => Math.random() - 0.5);
-          const shuffleSquare = square.sort(() => Math.random() - 0.5);
-          
-          // Mix rows: alternate between landscape and portrait rows
-          const result = [];
-          const landscapePerRow = 4; // 4 landscape images per row
-          const portraitPerRow = 4; // 4 portrait images per row
-          
-          let lIndex = 0;
-          let pIndex = 0;
-          let useLandscape = Math.random() > 0.5; // Random start
-          
-          while (lIndex < shuffleLandscape.length || pIndex < shufflePortrait.length) {
-            if (useLandscape && lIndex < shuffleLandscape.length) {
-              // Add a row of landscape images
-              for (let i = 0; i < landscapePerRow && lIndex < shuffleLandscape.length; i++) {
-                result.push(shuffleLandscape[lIndex++]);
-              }
-              useLandscape = false;
-            } else if (!useLandscape && pIndex < shufflePortrait.length) {
-              // Add a row of portrait images
-              for (let i = 0; i < portraitPerRow && pIndex < shufflePortrait.length; i++) {
-                result.push(shufflePortrait[pIndex++]);
-              }
-              useLandscape = true;
-            } else {
-              // Switch if one group is exhausted
-              useLandscape = !useLandscape;
-            }
-          }
-          
-          // Add squares at the end
-          result.push(...shuffleSquare);
-          
-          resolve(result);
+          finishSorting();
         }
       };
+      
       img.onerror = function() {
+        console.warn(`Failed to load image for orientation detection: ${artwork.thumb}`);
         artwork.orientation = 'square';
         square.push(artwork);
         processed++;
         if (processed === artworks.length) {
-          const shuffleLandscape = landscape.sort(() => Math.random() - 0.5);
-          const shufflePortrait = portrait.sort(() => Math.random() - 0.5);
-          const shuffleSquare = square.sort(() => Math.random() - 0.5);
-          
-          const result = [];
-          const landscapePerRow = 4;
-          const portraitPerRow = 4;
-          
-          let lIndex = 0;
-          let pIndex = 0;
-          let useLandscape = Math.random() > 0.5;
-          
-          while (lIndex < shuffleLandscape.length || pIndex < shufflePortrait.length) {
-            if (useLandscape && lIndex < shuffleLandscape.length) {
-              for (let i = 0; i < landscapePerRow && lIndex < shuffleLandscape.length; i++) {
-                result.push(shuffleLandscape[lIndex++]);
-              }
-              useLandscape = false;
-            } else if (!useLandscape && pIndex < shufflePortrait.length) {
-              for (let i = 0; i < portraitPerRow && pIndex < shufflePortrait.length; i++) {
-                result.push(shufflePortrait[pIndex++]);
-              }
-              useLandscape = true;
-            } else {
-              useLandscape = !useLandscape;
-            }
-          }
-          
-          result.push(...shuffleSquare);
-          resolve(result);
+          finishSorting();
         }
       };
+      
+      // Set timeout for individual image
+      setTimeout(() => {
+        if (!img.complete) {
+          img.onerror();
+        }
+      }, 5000);
+      
       img.src = artwork.thumb;
     });
   });
@@ -1351,12 +1346,12 @@ function loadImage(index) {
     }, 16); // ~60fps
   }
   
-  // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque
+  // Auto-zoom demonstration - seulement lors ouverture depuis mosaïque (desktop only)
   let userInteracted = false;
   
   viewer.addHandler('open', function() {
-    // Auto-zoom SEULEMENT si c'est l'ouverture initiale depuis la mosaïque
-    if (isInitialOpen && !userInteracted) {
+    // Auto-zoom SEULEMENT si c'est l'ouverture initiale depuis la mosaïque ET sur desktop
+    if (isInitialOpen && !userInteracted && window.innerWidth > 768) {
       setTimeout(() => {
         if (isInitialOpen && !userInteracted) {
           viewer.viewport.zoomTo(1.0, viewer.viewport.getCenter(), false);
@@ -1468,7 +1463,7 @@ lightboxViewer.addEventListener('touchend', (e) => {
   touchEndX = e.changedTouches[0].clientX;
   touchEndY = e.changedTouches[0].clientY;
   
-  const swipeThreshold = 230; // Very deliberate swipe required
+  const swipeThreshold = 200; // Reduced to 200px for easier swiping
   const swipeDistanceX = touchEndX - touchStartX;
   const swipeDistanceY = touchEndY - touchStartY;
   
