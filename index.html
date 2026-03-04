@@ -1151,19 +1151,6 @@ function getShareLink(index) {
 // Appeler après création de la mosaïque
 handleURLParameters();
 
-// Handle browser back/forward buttons
-window.addEventListener('popstate', function(event) {
-  if (event.state && event.state.imageIndex !== undefined) {
-    // Navigate to specific image
-    openLightbox(event.state.imageIndex);
-  } else {
-    // Close lightbox if no image parameter
-    if (lightbox.classList.contains('active')) {
-      closeLightboxFunc();
-    }
-  }
-});
-
 // Gestion du lightbox
 const lightbox = document.getElementById('lightbox');
 const closeLightbox = document.getElementById('closeLightbox');
@@ -1179,11 +1166,6 @@ function openLightbox(index) {
   lightbox.classList.add('active');
   console.log('Lightbox classList:', lightbox.classList);
   document.body.style.overflow = 'hidden';
-  
-  // Update URL with image parameter (without reloading page)
-  const newUrl = `${window.location.pathname}?image=${index}`;
-  window.history.pushState({imageIndex: index}, '', newUrl);
-  
   loadImage(currentIndex);
   
   // Add zoom-in animation
@@ -1202,9 +1184,6 @@ function closeLightboxFunc() {
   lightbox.classList.add('closing');
   lightbox.classList.remove('active');
   
-  // Reset URL to homepage (remove image parameter)
-  window.history.pushState({}, '', window.location.pathname);
-  
   // Wait for animation to complete before cleanup
   setTimeout(() => {
     lightbox.classList.remove('closing');
@@ -1217,33 +1196,10 @@ function closeLightboxFunc() {
   }, 1200); // Match the animation duration
 }
 
-// Helper function to update meta tags
-function updateMetaTag(property, content) {
-  let metaTag = document.querySelector(`meta[property="${property}"]`);
-  if (!metaTag) {
-    metaTag = document.querySelector(`meta[name="${property}"]`);
-  }
-  if (metaTag) {
-    metaTag.setAttribute('content', content);
-  }
-}
-
 function loadImage(index) {
   console.log('loadImage called with index:', index);
   const artwork = shuffledArtworks[index];
   console.log('Loading artwork:', artwork);
-  
-  // Update Open Graph meta tags for sharing
-  const imageUrl = `https://sebastianverdon.ch/${artwork.thumb}`;
-  const pageUrl = `https://sebastianverdon.ch/?image=${index}`;
-  const description = artwork.info.replace(/<[^>]*>/g, ''); // Remove HTML tags
-  
-  // Update or create meta tags
-  updateMetaTag('og:url', pageUrl);
-  updateMetaTag('og:image', imageUrl);
-  updateMetaTag('og:description', description);
-  updateMetaTag('twitter:image', imageUrl);
-  updateMetaTag('twitter:description', description);
   
   lightboxCaption.innerHTML = `
     <p>${artwork.info}</p>
@@ -1490,22 +1446,12 @@ function loadImage(index) {
 function showPrevImage() {
   isInitialOpen = false; // Désactiver auto-zoom pour navigation
   currentIndex = (currentIndex - 1 + shuffledArtworks.length) % shuffledArtworks.length;
-  
-  // Update URL
-  const newUrl = `${window.location.pathname}?image=${currentIndex}`;
-  window.history.pushState({imageIndex: currentIndex}, '', newUrl);
-  
   loadImage(currentIndex);
 }
 
 function showNextImage() {
   isInitialOpen = false; // Désactiver auto-zoom pour navigation
   currentIndex = (currentIndex + 1) % shuffledArtworks.length;
-  
-  // Update URL
-  const newUrl = `${window.location.pathname}?image=${currentIndex}`;
-  window.history.pushState({imageIndex: currentIndex}, '', newUrl);
-  
   loadImage(currentIndex);
 }
 
