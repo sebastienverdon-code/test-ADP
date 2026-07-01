@@ -240,6 +240,63 @@ header {
   transform: scale(1.15);
 }
 
+.lightbox-share {
+  position: fixed;
+  top: 10px;
+  right: 50px;
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  z-index: 2001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.lightbox-share svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.lightbox-share:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.lightbox-share.copied {
+  opacity: 1;
+  color: #2a8a4a;
+}
+
+.share-feedback {
+  position: fixed;
+  top: 42px;
+  right: 10px;
+  background: #222;
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  z-index: 2002;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-5px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+
+.share-feedback.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .lightbox-nav {
   position: fixed;
   top: 50%;
@@ -725,6 +782,24 @@ footer a:hover {
     display: none;
   }
   
+  .lightbox-share {
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    opacity: 0.7;
+  }
+  
+  .lightbox-share svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .share-feedback {
+    top: 55px;
+    right: 15px;
+  }
+  
   .lightbox-viewer {
     width: 100% !important;
     height: calc(100% - 50px) !important;
@@ -826,6 +901,16 @@ footer a:hover {
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="closeLightbox">×</button>
+  <button class="lightbox-share" id="shareImage" title="Partager cette image">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+    </svg>
+  </button>
+  <div class="share-feedback" id="shareFeedback">Lien copié !</div>
   <button class="lightbox-nav prev" id="prevImage">‹</button>
   <button class="lightbox-nav next" id="nextImage">›</button>
   <div class="lightbox-viewer" id="lightboxViewer"></div>
@@ -1126,26 +1211,39 @@ sortByOrientation(shuffledArtworks).then(sortedArtworks => {
 // Appeler createMosaic pour générer la mosaïque
 createMosaic();
 
+// Identifiant stable d'une image (basé sur le nom de fichier, pas sur sa position
+// dans la mosaïque qui est mélangée aléatoirement à chaque chargement de page)
+function getArtworkId(artwork) {
+  const match = artwork.url.match(/([^\/]+)\.[^.]+$/);
+  return match ? match[1] : artwork.url;
+}
+
+// Retrouve l'index (dans la mosaïque mélangée) d'une image à partir de son id stable
+function findIndexById(id) {
+  return shuffledArtworks.findIndex(a => getArtworkId(a) === id);
+}
+
 // Gérer les paramètres URL pour ouvrir une image spécifique
 function handleURLParameters() {
   const urlParams = new URLSearchParams(window.location.search);
-  const imageParam = urlParams.get('image');
+  const imgParam = urlParams.get('img');
   
-  if (imageParam) {
-    const imageIndex = parseInt(imageParam);
-    if (!isNaN(imageIndex) && imageIndex >= 0 && imageIndex < shuffledArtworks.length) {
-      // Attendre que la mosaïque soit créée, puis ouvrir l'image
-      setTimeout(() => {
+  if (imgParam) {
+    // Attendre que la mosaïque soit créée, puis ouvrir l'image
+    setTimeout(() => {
+      const imageIndex = findIndexById(imgParam);
+      if (imageIndex !== -1) {
         openLightbox(imageIndex);
-      }, 500);
-    }
+      }
+    }, 500);
   }
 }
 
-// Fonction pour copier le lien de partage d'une image
+// Fonction pour générer le lien de partage d'une image (id stable, indépendant du mélange)
 function getShareLink(index) {
   const baseUrl = window.location.origin + window.location.pathname;
-  return `${baseUrl}?image=${index}`;
+  const artwork = shuffledArtworks[index];
+  return `${baseUrl}?img=${getArtworkId(artwork)}`;
 }
 
 // Appeler après création de la mosaïque
@@ -1459,6 +1557,55 @@ function showNextImage() {
 closeLightbox.addEventListener('click', closeLightboxFunc);
 prevImage.addEventListener('click', showPrevImage);
 nextImage.addEventListener('click', showNextImage);
+
+// Partage d'une image individuelle
+const shareImage = document.getElementById('shareImage');
+const shareFeedback = document.getElementById('shareFeedback');
+
+function showShareFeedback(message) {
+  shareFeedback.textContent = message;
+  shareImage.classList.add('copied');
+  shareFeedback.classList.add('show');
+  setTimeout(() => {
+    shareImage.classList.remove('copied');
+    shareFeedback.classList.remove('show');
+  }, 1800);
+}
+
+shareImage.addEventListener('click', async (e) => {
+  e.stopPropagation();
+  const link = getShareLink(currentIndex);
+  const artwork = shuffledArtworks[currentIndex];
+  const plainInfo = artwork.info.replace(/<[^>]+>/g, '');
+
+  // Sur mobile : ouvre le partage natif du système si disponible
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Sebastian Verdon – Art Documentation Photography',
+        text: plainInfo,
+        url: link
+      });
+      return;
+    } catch (err) {
+      // L'utilisateur a annulé le partage, ou l'API a échoué : on retente via le presse-papier
+    }
+  }
+
+  // Sur desktop (ou en secours) : copie le lien dans le presse-papier
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(link);
+      showShareFeedback('Lien copié !');
+      return;
+    } catch (err) {
+      // Ignorer et passer au dernier recours
+    }
+  }
+
+  // Dernier recours si rien d'autre ne fonctionne
+  window.prompt('Copiez ce lien :', link);
+});
 
 // Swipe functionality for mobile
 let touchStartX = 0;
